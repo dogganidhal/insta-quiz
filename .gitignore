@@ -2,4 +2,4 @@
 */build
 */tmp
 */temp
-*/.env
+**/.env

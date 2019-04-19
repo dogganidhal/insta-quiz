@@ -1,0 +1,84 @@
+scalar GraphQLDateTime
+
+type User {
+  id: ID!
+  fullName: String
+  email: String!
+  googleAccessToken: String
+  quizSubmissions: [QuizSubmission]
+}
+
+type Quiz {
+  id: ID!
+  title: String!
+  description: String!
+  authorId: ID!
+  author: User!
+  deadline: GraphQLDateTime
+  questions: [Question]!
+  submissions: [QuizSubmission]
+}
+
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTI_CHOICE
+  INPUT
+}
+
+type Question {
+  id: ID!
+  content: String!
+  quizId: ID!
+  quiz: Quiz!
+  type: QuestionType!
+  suggestions: [Suggestion]!
+  answers: [Answer]!
+}
+
+type Suggestion {
+  id: ID!
+  questionId: ID!
+  question: Question!
+  content: String
+  imageUrl: String
+}
+
+type Answer {
+  id: ID!
+  questionId: ID!
+  question: Question!
+  suggestionId: ID!
+  suggestion: Suggestion!
+}
+
+type QuizSubmission {
+  id: ID!
+  userId: ID!
+  user: User!
+  quizId: ID!
+  quiz: Quiz!
+  questionSubmissions: [QuizQuestionSubmission]
+}
+
+type QuizQuestionSubmission {
+  id: ID!
+  submissionId: ID!
+  submission: QuizSubmission!
+  content: String
+}
+
+type QuizQuestionSuggestion {
+  id: ID!
+  questionSubmissionId: ID!
+  questionSubmission: QuizQuestionSubmission!
+  sugesstionId: ID!
+  suggestion: Suggestion!
+}
+
+type Query {
+  me: User
+}
+
+type Mutation {
+  login(token: String!): String!
+}

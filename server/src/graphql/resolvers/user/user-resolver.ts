@@ -1,13 +1,13 @@
-import { IUserResolver } from ".";
 import { inject, injectable } from "inversify";
-import { Types } from "../../constants/types";
-import { IUserRepository } from "../../repository/user";
-import { UnauthenticatedException, UnauthorizedException } from "../../exceptions";
+import { Types } from "../../../constants/types";
+import { IUserRepository } from "../../../repository/user";
+import { UnauthenticatedException, UnauthorizedException } from "../../../exceptions";
 import { OAuth2Client  } from "google-auth-library";
-import { Constants } from "../../constants/constants";
-import { User } from "../../model/entity/user";
+import { Constants } from "../../../constants/constants";
+import { User } from "../../../model/entity/user";
 import { sign } from "jsonwebtoken";
-import { AuthCredentials } from "../../model/dto/auth-credentials";
+import { AuthCredentials } from "../../../model/dto/output/auth-credentials";
+import { IUserMutations, IUserQueries, IUserResolver } from ".";
 
 
 @injectable()
@@ -15,12 +15,13 @@ export class UserResolver implements IUserResolver {
 
   @inject(Types.IUserRepository) private readonly userRepository: IUserRepository;
 
-  public get mutations() {
+  public get mutations(): IUserMutations {
     return {
       
     };
   }
-  public get queries() {
+  
+  public get queries(): IUserQueries {
     return {
       login: async (_, args: { token: string }) => {
         let user = await this.login(args.token);
@@ -43,7 +44,7 @@ export class UserResolver implements IUserResolver {
         audience: process.env.GOOGLE_OAUTH2_CLIENTID,
       });
       let payload = ticket.getPayload();
-      if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) {
+      if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) { // TODO: Replace with proper validation logic
         throw UnauthorizedException;  
       }
       return this.userRepository.createUserIfNeeded(payload.email, payload.name);

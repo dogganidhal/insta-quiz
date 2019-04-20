@@ -19,6 +19,13 @@ type Quiz {
   submissions: [QuizSubmission]
 }
 
+input InsertQuizObject {
+  title: String!
+  description: String!
+  deadline: GraphQLDateTime
+  questions: [InsertQuestionObject]!
+}
+
 enum QuestionType {
   SINGLE_CHOICE
   MULTI_CHOICE
@@ -35,12 +42,24 @@ type Question {
   answers: [Answer]!
 }
 
+input InsertQuestionObject {
+  content: String!
+  type: QuestionType!
+  suggestions: [InsertSuggestionObject]
+}
+
 type Suggestion {
   id: ID!
   questionId: ID!
   question: Question!
   content: String
   imageUrl: String
+}
+
+input InsertSuggestionObject {
+  content: String
+  imageUrl: String
+  isCorrectAnswer: Boolean
 }
 
 type Answer {
@@ -82,8 +101,9 @@ type AuthCredentials {
 type Query {
   me: User
   login(token: String!): AuthCredentials!
+  myQuizzes: [Quiz]
 }
 
 type Mutation {
-  createQuiz: Quiz
+  createQuiz(quizData: InsertQuizObject): Quiz
 }

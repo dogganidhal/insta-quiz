@@ -1,10 +1,8 @@
 
-export interface IQueryResolver {
-  readonly queries: any;
+export interface IQueryResolver<T = any> {
+  readonly queries: T;
 }
 
-export interface IMutatationResolver {
-  readonly mutations: any;
+export interface IMutatationResolver<T = any> {
+  readonly mutations: T;
 }
-
-export type IUserResolver = IQueryResolver & IMutatationResolver;

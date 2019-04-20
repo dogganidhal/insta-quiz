@@ -6,11 +6,15 @@ import * as bodyParser from "body-parser";
 import * as express from "express";
 import { config } from "dotenv";
 import { AuthMiddleware } from './graphql/middleware/auth-middleware';
-import { createConnection, Connection, getConnectionOptions } from 'typeorm';
-import { IUserResolver } from './graphql/resolvers';
-import { UserResolver } from './graphql/resolvers/user-resolver';
+import { createConnection, Connection } from 'typeorm';
+import { IUserResolver } from './graphql/resolvers/user';
+import { UserResolver } from './graphql/resolvers/user/user-resolver';
 import { UserRepositoryImpl } from './repository/user/user-repo-impl';
 import { IUserRepository } from './repository/user';
+import { QuizResolver } from './graphql/resolvers/quiz/quiz-resolver';
+import { IQuizRepository } from './repository/quiz';
+import { QuizRepositoryImpl } from './repository/quiz/quiz-repo-impl';
+import { IQuizResolver } from './graphql/resolvers/quiz';
 
 async function main() {
 
@@ -18,7 +22,9 @@ async function main() {
   let container = new Container();
 
   container.bind<IUserRepository>(Types.IUserRepository).to(UserRepositoryImpl);
+  container.bind<IQuizRepository>(Types.IQuizRepository).to(QuizRepositoryImpl);
   container.bind<IUserResolver>(Types.IUserResolver).to(UserResolver);
+  container.bind<IQuizResolver>(Types.IQuizResolver).to(QuizResolver);
   container.bind<AuthMiddleware>(Types.AuthMiddleware).to(AuthMiddleware);
   container.bind<GraphQLServer>(Types.GraphQLServer).to(GraphQLServer);
 

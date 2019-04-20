@@ -5,22 +5,26 @@ import { Types } from "../constants/types";
 import { GraphQLDateTime } from "graphql-iso-date";
 import { importSchema } from "graphql-import";
 import { merge } from "lodash";
-import { IUserResolver } from "./resolvers";
+import { IUserResolver } from "./resolvers/user";
 import { AuthMiddleware } from "./middleware/auth-middleware";
+import { IQuizResolver } from "./resolvers/quiz";
 
 @injectable()
 export class GraphQLServer {
 
-  @inject(Types.IUserResolver) private readonly userResolver: IUserResolver
-  @inject(Types.AuthMiddleware) private readonly authMiddleware: AuthMiddleware
+  @inject(Types.IUserResolver) private readonly userResolver: IUserResolver;
+  @inject(Types.IQuizResolver) private readonly quizResolver: IQuizResolver
+  @inject(Types.AuthMiddleware) private readonly authMiddleware: AuthMiddleware;
 
   public get resolvers(): IResolvers {
     return {
       Query: merge(
-        this.userResolver.queries
+        this.userResolver.queries,
+        this.quizResolver.queries
       ),
       Mutation: merge(
-        this.userResolver.mutations
+        this.userResolver.mutations,
+        this.quizResolver.mutations
       )
     };
   }

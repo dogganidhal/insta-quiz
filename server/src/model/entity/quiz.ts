@@ -21,7 +21,15 @@ export class Quiz {
   public authorId: string;
 
   @JoinColumn()
-  @ManyToOne(type => User, { nullable: false })
+  @ManyToOne(type => User, { nullable: false, cascade: true })
   public author: User;
+
+  constructor()
+  constructor(data: Partial<Quiz>)
+  constructor(data?: Partial<Quiz>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 
 }

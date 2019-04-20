@@ -1,10 +1,10 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, Repository, Equal, JoinColumn } from "typeorm";
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Quiz } from "./quiz";
 
 export enum QuestionType {
-  MULTI_CHOICE = "multi_choice",
-  SINGLE_CHOICE = "signle_choice",
-  INPUT = "input"
+  MULTI_CHOICE = "MULTI_CHOICE",
+  SINGLE_CHOICE = "SINGLE_CHOICE",
+  INPUT = "INPUT"
 }
 
 @Entity()
@@ -26,7 +26,15 @@ export class Question {
   public quizId: string;
 
   @JoinColumn()
-  @ManyToOne(type => Quiz, { nullable: false })
+  @ManyToOne(type => Quiz, { nullable: false, cascade: true })
   public quiz: Quiz;
+
+  constructor()
+  constructor(data: Partial<Question>)
+  constructor(data?: Partial<Question>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 
 }

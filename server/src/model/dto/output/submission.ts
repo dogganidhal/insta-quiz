@@ -1,7 +1,7 @@
 import { User } from "./user";
 import { Quiz } from "./quiz";
-import { QuizQuestionSubmission } from "./quiz-question-submission";
 import { Entity } from "../../entity";
+import { Answer } from "./answer";
 
 
 /*
@@ -15,17 +15,17 @@ type QuizSubmission {
 }
 */
 
-export class QuizSubmission {
+export class Submission {
 
   public id: string;
   public userId: string;
   public user: User;
   public quizId: string;
   public quiz: Quiz;
-  public questionSubmissions: QuizQuestionSubmission[];
+  public answers: Answer[];
 
-  constructor(submission: Entity.QuizSubmission)
-  constructor(submission: Entity.QuizSubmission, questionSubmissions?: Entity.QuizQuestionSubmission[]) {
+  constructor(submission: Entity.Submission)
+  constructor(submission: Entity.Submission, answers?: Entity.Answer[]) {
     this.id = submission.id;
     this.userId = submission.userId;
     this.quizId = submission.quizId;
@@ -35,8 +35,8 @@ export class QuizSubmission {
     if (submission.quiz) {
       this.quiz = new Quiz(submission.quiz);
     }
-    if (questionSubmissions) {
-      this.questionSubmissions = questionSubmissions.map(qs => new QuizQuestionSubmission(qs));
+    if (answers) {
+      this.answers = answers.map(qs => new Answer(qs));
     }
   }
 

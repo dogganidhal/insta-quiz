@@ -1,6 +1,6 @@
 import { User } from "./user";
 import { Question } from "./question";
-import { QuizSubmission } from "./quiz-submission";
+import { Submission } from "./submission";
 import { Entity } from "../../entity";
 
 /*
@@ -25,7 +25,7 @@ export class Quiz {
   public author: User;
   public deadline?: Date;
   public questions: Question[];
-  public submissions: QuizSubmission[];
+  public submissions: Submission[];
 
   constructor(quiz: Entity.Quiz) {
     this.id = quiz.id;

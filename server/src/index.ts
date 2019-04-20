@@ -15,6 +15,8 @@ import { QuizResolver } from './graphql/resolvers/quiz/quiz-resolver';
 import { IQuizRepository } from './repository/quiz';
 import { QuizRepositoryImpl } from './repository/quiz/quiz-repo-impl';
 import { IQuizResolver } from './graphql/resolvers/quiz';
+import { IQuizManager } from './manager/quiz';
+import { QuizManagerImpl } from './manager/quiz/quiz-manager-impl';
 
 async function main() {
 
@@ -23,6 +25,7 @@ async function main() {
 
   container.bind<IUserRepository>(Types.IUserRepository).to(UserRepositoryImpl);
   container.bind<IQuizRepository>(Types.IQuizRepository).to(QuizRepositoryImpl);
+  container.bind<IQuizManager>(Types.IQuizManager).to(QuizManagerImpl);
   container.bind<IUserResolver>(Types.IUserResolver).to(UserResolver);
   container.bind<IQuizResolver>(Types.IQuizResolver).to(QuizResolver);
   container.bind<AuthMiddleware>(Types.AuthMiddleware).to(AuthMiddleware);

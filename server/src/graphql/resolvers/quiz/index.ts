@@ -13,15 +13,22 @@ export type IQuizMutations = {
 export type IQuizTypeResolver = {
   author(quiz: Dto.Output.Quiz): Promise<Dto.Output.User>;
   questions(quiz: Dto.Output.Quiz): Promise<Dto.Output.Question[]>;
-  submissions(quiz: Dto.Output.Quiz): Promise<Dto.Output.QuizSubmission[]>;
+  submissions(quiz: Dto.Output.Quiz): Promise<Dto.Output.Submission[]>;
 }
 
-export type IQuizSubmissionTypeResolver = {
-  user(submission: Dto.Output.QuizSubmission): Promise<Dto.Output.User>;
-  quiz(submission: Dto.Output.QuizSubmission): Promise<Dto.Output.Quiz>;
+export type ISubmissionTypeResolver = {
+  user(submission: Dto.Output.Submission): Promise<Dto.Output.User>;
+  quiz(submission: Dto.Output.Submission): Promise<Dto.Output.Quiz>;
+}
+
+export type IQuestionTypeResolver = {
+  quiz(question: Dto.Output.Question): Promise<Dto.Output.Quiz>;
+  suggestions(question: Dto.Output.Question): Promise<Dto.Output.Suggestion[]>;
+  answers(question: Dto.Output.Question): Promise<Dto.Output.Answer[]>;
 }
 
 export type IQuizResolver = IQueryResolver<IQuizQueries> & IMutatationResolver<IQuizMutations> & {
   Quiz: IQuizTypeResolver;
-  QuizSubmission: IQuizSubmissionTypeResolver;
+  Submission: ISubmissionTypeResolver;
+  Question: IQuestionTypeResolver;
 };

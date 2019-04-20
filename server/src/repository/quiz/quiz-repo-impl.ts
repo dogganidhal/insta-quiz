@@ -15,8 +15,8 @@ export class QuizRepositoryImpl implements IQuizRepository {
     return await repository.find({ authorId: userId });
   }
 
-  public async getQuizSubmissionForUser(userId: string): Promise<Entity.QuizSubmission[]> {
-    let repository = this.connection.getRepository(Entity.QuizSubmission);
+  public async getSubmissionsForUser(userId: string): Promise<Entity.Submission[]> {
+    let repository = this.connection.getRepository(Entity.Submission);
     return await repository.find({ userId: userId });
   }
 
@@ -25,8 +25,39 @@ export class QuizRepositoryImpl implements IQuizRepository {
     return await repository.findOne({ id: quizId });
   }
 
-  public async createQuiz(): Promise<Entity.Quiz> {
-    throw new Error("Not implemented");
+  public async createQuiz(quiz: Entity.Quiz): Promise<Entity.Quiz> {
+    let repository = this.connection.getRepository(Entity.Quiz);
+    return await repository.save(quiz);
+  }
+
+  public async createSuggestion(suggestion: Entity.Suggestion): Promise<Entity.Suggestion> {
+    let repository = this.connection.getRepository(Entity.Suggestion);
+    return await repository.save(suggestion);
+  }
+
+  public async createQuestion(question: Entity.Question): Promise<Entity.Question> {
+    let repository = this.connection.getRepository(Entity.Question);
+    return await repository.save(question);
+  }
+
+  public async getQuestionsByQuizId(quizId: string): Promise<Entity.Question[]> {
+    let repository = this.connection.getRepository(Entity.Question);
+    return await repository.find({ quizId: quizId });
+  }
+
+  public async getSubmissionsByQuizId(quizId: string): Promise<Entity.Submission[]> {
+    let repository = this.connection.getRepository(Entity.Submission);
+    return await repository.find({ quizId: quizId });
+  }
+
+  public async getAnswersByQuestionId(questionId: string): Promise<Entity.Answer[]> {
+    let repository = this.connection.getRepository(Entity.Answer);
+    return await repository.find({ suggestion: {questionId: questionId} });
+  }
+
+  public async getSuggestionsByQuestionId(questionId: string): Promise<Entity.Suggestion[]> {
+    let repository = this.connection.getRepository(Entity.Suggestion);
+    return await repository.find({ questionId: questionId });
   }
 
 }

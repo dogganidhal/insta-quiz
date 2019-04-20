@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column } from "typeorm";
-import { Question } from "./question";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from "typeorm";
+import { Submission } from "./submission";
 import { Suggestion } from "./suggestion";
 
 
@@ -9,12 +9,15 @@ export class Answer {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
+  @Column({ nullable: false })
+  public content: string;
+
   @Column()
-  public questionId: string;
+  public submissionId: string;
 
   @JoinColumn()
-  @ManyToOne(type => Question, { nullable: false })
-  public question: Question;
+  @ManyToOne(type => Submission, { nullable: false })
+  public submission: Submission;
 
   @Column()
   public suggestionId: string;
@@ -22,5 +25,13 @@ export class Answer {
   @JoinColumn()
   @ManyToOne(type => Suggestion, { nullable: false })
   public suggestion: Suggestion;
+
+  constructor()
+  constructor(data: Answer)
+  constructor(data?: Answer) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 
 }

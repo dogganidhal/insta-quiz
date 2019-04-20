@@ -7,5 +7,6 @@ export let Types = {
   IUserResolver: Symbol.for("IUserResolver"),
   IQuizResolver: Symbol.for("IQuizResolver"),
   AuthMiddleware: Symbol.for("AuthMiddleware"),
-  GraphQLServer: Symbol.for("GraphQLServer")
+  GraphQLServer: Symbol.for("GraphQLServer"),
+  IQuizManager: Symbol.for("IQuizManager"),
 }

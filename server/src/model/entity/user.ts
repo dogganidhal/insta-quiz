@@ -13,4 +13,12 @@ export class User {
   @Column({nullable: false, unique: true})
   public email: string;
 
+  constructor()
+  constructor(data: Partial<User>)
+  constructor(data?: Partial<User>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+
 }

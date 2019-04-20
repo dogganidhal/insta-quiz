@@ -12,7 +12,7 @@ export type IUserMutations = {
 }
 
 export type IUserTypeResolver = {
-  quizSubmissions(user: Dto.Output.User): Promise<Dto.Output.QuizSubmission[]>;
+  submissions(user: Dto.Output.User): Promise<Dto.Output.Submission[]>;
 }
 
 export type IUserResolver = IQueryResolver<IUserQueries> & IMutatationResolver<IUserMutations> & {

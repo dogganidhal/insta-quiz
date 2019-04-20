@@ -1,5 +1,5 @@
 import { Entity } from "../../entity";
-import { QuizSubmission } from "./quiz-submission";
+import { Submission } from "./submission";
 
 
 /*
@@ -16,7 +16,7 @@ export class User {
   public id: string;
   public fullName: string;
   public email: string;
-  public quizSubmissions?: QuizSubmission[];
+  public quizSubmissions?: Submission[];
 
   constructor(user: Entity.User) {
     this.id = user.id;

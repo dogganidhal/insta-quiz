@@ -1,10 +1,16 @@
 scalar GraphQLDateTime
 
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTI_CHOICE
+  INPUT
+}
+
 type User {
   id: ID!
   fullName: String
   email: String!
-  quizSubmissions: [QuizSubmission]
+  submissions: [Submission]
 }
 
 type Quiz {
@@ -15,20 +21,7 @@ type Quiz {
   author: User!
   deadline: GraphQLDateTime
   questions: [Question]!
-  submissions: [QuizSubmission]
-}
-
-input InsertQuizObject {
-  title: String!
-  description: String!
-  deadline: GraphQLDateTime
-  questions: [InsertQuestionObject]!
-}
-
-enum QuestionType {
-  SINGLE_CHOICE
-  MULTI_CHOICE
-  INPUT
+  submissions: [Submission]
 }
 
 type Question {
@@ -41,55 +34,30 @@ type Question {
   answers: [Answer]!
 }
 
-input InsertQuestionObject {
-  content: String!
-  type: QuestionType!
-  suggestions: [InsertSuggestionObject]
-}
-
 type Suggestion {
   id: ID!
   questionId: ID!
   question: Question!
   content: String
   imageUrl: String
+  isCorrect: Boolean!
 }
 
-input InsertSuggestionObject {
-  content: String
-  imageUrl: String
-  isCorrectAnswer: Boolean
-}
-
-type Answer {
-  id: ID!
-  questionId: ID!
-  question: Question!
-  suggestionId: ID!
-  suggestion: Suggestion!
-}
-
-type QuizSubmission {
+type Submission {
   id: ID!
   userId: ID!
   user: User!
   quizId: ID!
   quiz: Quiz!
-  questionSubmissions: [QuizQuestionSubmission]
+  answers: [Answer]
 }
 
-type QuizQuestionSubmission {
+type Answer {
   id: ID!
-  submissionId: ID!
-  submission: QuizSubmission!
   content: String
-}
-
-type QuizQuestionSuggestion {
-  id: ID!
-  questionSubmissionId: ID!
-  questionSubmission: QuizQuestionSubmission!
-  sugesstionId: ID!
+  submissionId: ID!
+  submission: Submission!
+  suggestionId: ID!
   suggestion: Suggestion!
 }
 
@@ -105,4 +73,23 @@ type Query {
 
 type Mutation {
   createQuiz(quizData: InsertQuizObject): Quiz
+}
+
+input InsertQuizObject {
+  title: String!
+  description: String!
+  deadline: GraphQLDateTime
+  questions: [InsertQuestionObject]!
+}
+
+input InsertQuestionObject {
+  content: String!
+  type: QuestionType!
+  suggestions: [InsertSuggestionObject]
+}
+
+input InsertSuggestionObject {
+  content: String
+  imageUrl: String
+  isCorrect: Boolean
 }

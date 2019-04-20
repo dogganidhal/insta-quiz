@@ -41,9 +41,9 @@ export class UserResolver implements IUserResolver {
 
   public get User(): IUserTypeResolver {
     return {
-      quizSubmissions: async (user: Dto.Output.User) => {
-        let submissions = await this.quizRepository.getQuizSubmissionForUser(user.id);
-        return submissions.map(submission => new Dto.Output.QuizSubmission(submission));
+      submissions: async (user: Dto.Output.User) => {
+        let submissions = await this.quizRepository.getSubmissionsForUser(user.id);
+        return submissions.map(submission => new Dto.Output.Submission(submission));
       }
     };
   }

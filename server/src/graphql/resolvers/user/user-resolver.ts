@@ -4,16 +4,18 @@ import { IUserRepository } from "../../../repository/user";
 import { UnauthenticatedException, UnauthorizedException } from "../../../exceptions";
 import { OAuth2Client  } from "google-auth-library";
 import { Constants } from "../../../constants/constants";
-import { User } from "../../../model/entity/user";
 import { sign } from "jsonwebtoken";
-import { AuthCredentials } from "../../../model/dto/output/auth-credentials";
 import { IUserMutations, IUserQueries, IUserResolver, IUserTypeResolver } from ".";
+import { Dto } from "../../../model/dto";
+import { Entity } from "../../../model/entity";
+import { IQuizRepository } from "../../../repository/quiz";
 
 
 @injectable()
 export class UserResolver implements IUserResolver {
 
   @inject(Types.IUserRepository) private readonly userRepository: IUserRepository;
+  @inject(Types.IQuizRepository) private readonly quizRepository: IQuizRepository;
 
   public get mutations(): IUserMutations {
     return {
@@ -26,23 +28,27 @@ export class UserResolver implements IUserResolver {
       login: async (_, args: { token: string }) => {
         let user = await this.login(args.token);
         let accessToken = await this.signJwt(user);
-        return new AuthCredentials(accessToken);
+        return new Dto.Output.AuthCredentials(accessToken);
       },
-      me: (_, args, context) => {
+      me: async (_, args, context) => {
         if (!context.user)
           throw UnauthenticatedException;
-        return this.userRepository.getUserByEmail(context.user.email);
+        let user = await this.userRepository.getUserByEmail(context.user.email);
+        return new Dto.Output.User(user);
       },
     };
   };
 
   public get User(): IUserTypeResolver {
     return {
-      quizSubmissions: (user: User) => null
+      quizSubmissions: async (user: Dto.Output.User) => {
+        let submissions = await this.quizRepository.getQuizSubmissionForUser(user.id);
+        return submissions.map(submission => new Dto.Output.QuizSubmission(submission));
+      }
     };
   }
 
-  private async login(googleAccessToken: string): Promise<User> {
+  private async login(googleAccessToken: string): Promise<Entity.User> {
     let oAuthClient = new OAuth2Client(process.env.GOOGLE_OAUTH2_CLIENTID);
     try {
       let ticket = await oAuthClient.verifyIdToken({
@@ -53,13 +59,13 @@ export class UserResolver implements IUserResolver {
       if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) { // TODO: Replace with proper validation logic
         throw UnauthorizedException;  
       }
-      return this.userRepository.createUserIfNeeded(payload.email, payload.name);
+      return this.userRepository.getOrCreateUser(payload.email, payload.name);
     } catch (exception) {
       throw UnauthorizedException;
     }
   }
 
-  private async signJwt(user: User): Promise<string> {
+  private async signJwt(user: Entity.User): Promise<string> {
     return await sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,

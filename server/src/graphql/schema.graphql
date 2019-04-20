@@ -4,7 +4,6 @@ type User {
   id: ID!
   fullName: String
   email: String!
-  googleAccessToken: String
   quizSubmissions: [QuizSubmission]
 }
 

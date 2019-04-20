@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, Repository, Equal } from "typeorm";
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, Repository, Equal, JoinColumn } from "typeorm";
 import { Quiz } from "./quiz";
 
 export enum QuestionType {
@@ -22,6 +22,10 @@ export class Question {
   })
   public type: QuestionType;
 
+  @Column()
+  public quizId: string;
+
+  @JoinColumn()
   @ManyToOne(type => Quiz, { nullable: false })
   public quiz: Quiz;
 

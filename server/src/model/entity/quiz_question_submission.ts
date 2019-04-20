@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from "typeorm";
 import { QuizSubmission } from "./quiz_submission";
 
 
@@ -11,6 +11,10 @@ export class QuizQuestionSubmission {
   @Column({ nullable: false })
   public content: string;
 
+  @Column()
+  public submissionId: string;
+
+  @JoinColumn()
   @ManyToOne(type => QuizSubmission, { nullable: false })
   public submission: QuizSubmission;
 

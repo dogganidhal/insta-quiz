@@ -1,12 +1,10 @@
 import { IQueryResolver, IMutatationResolver } from "..";
-import { AuthCredentials } from "../../../model/dto/output/auth-credentials";
-import { User } from "../../../model/entity/user";
-import { QuizSubmission } from "../../../model/entity/quiz_submission";
+import { Dto } from "../../../model/dto";
 
 
 export type IUserQueries = {
-  login(parent, args, context, info): Promise<AuthCredentials>;
-  me(parent, args, context, info): Promise<User>;
+  login(parent, args, context, info): Promise<Dto.Output.AuthCredentials>;
+  me(parent, args, context, info): Promise<Dto.Output.User>;
 };
 
 export type IUserMutations = {
@@ -14,7 +12,7 @@ export type IUserMutations = {
 }
 
 export type IUserTypeResolver = {
-  quizSubmissions(user: User): Promise<QuizSubmission[]>;
+  quizSubmissions(user: Dto.Output.User): Promise<Dto.Output.QuizSubmission[]>;
 }
 
 export type IUserResolver = IQueryResolver<IUserQueries> & IMutatationResolver<IUserMutations> & {

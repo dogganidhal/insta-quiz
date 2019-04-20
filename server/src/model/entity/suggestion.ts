@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, Entity, ManyToOne } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Entity, ManyToOne, JoinColumn } from "typeorm";
 import { Question } from "./question";
 import { QuizQuestionSuggestion } from "./quiz_question_suggestion";
 
@@ -15,6 +15,10 @@ export class Suggestion {
   @Column({ nullable: true })
   public imageUrl: string;
 
+  @Column()
+  public questionId: string;
+
+  @JoinColumn()
   @ManyToOne(type => Question, { nullable: false })
   public question: Question;
 

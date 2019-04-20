@@ -2,7 +2,7 @@ import { IUserRepository } from ".";
 import { injectable, inject } from "inversify";
 import { Types } from "../../constants/types";
 import { Connection } from "typeorm";
-import { User } from "../../model/entity/user";
+import { Entity } from "../../model/entity";
 
 
 @injectable()
@@ -10,20 +10,25 @@ export class UserRepositoryImpl implements IUserRepository {
 
   @inject(Types.DatabaseConnection) private readonly connection: Connection;
   
-  public async getUserByEmail(email: string): Promise<User> {
-    let repository = this.connection.getRepository(User);
+  public async getUserByEmail(email: string): Promise<Entity.User> {
+    let repository = this.connection.getRepository(Entity.User);
     return repository.findOne({email: email});
   }
 
-  public async createUserIfNeeded(email: string, fullName: string): Promise<User> {
+  public async getUserById(userId: string): Promise<Entity.User> {
+    let repository = this.connection.getRepository(Entity.User);
+    return repository.findOne({ id: userId });
+  }
 
-    let repository = this.connection.getRepository(User);
+  public async getOrCreateUser(email: string, fullName: string): Promise<Entity.User> {
+
+    let repository = this.connection.getRepository(Entity.User);
     let userWithSameEmail = await repository.findOne({email: email});
 
     if (userWithSameEmail)
       return userWithSameEmail;
 
-    let user = new User;
+    let user = new Entity.User();
 
     user.email = email;
     user.fullName = fullName;

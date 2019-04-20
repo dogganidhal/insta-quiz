@@ -1,25 +1,27 @@
-import { Quiz } from "../../../model/entity/quiz";
 import { IQueryResolver, IMutatationResolver } from "..";
-import { IResolvers } from "graphql-tools";
-import { User } from "../../../model/entity/user";
-import { QuizSubmission } from "../../../model/entity/quiz_submission";
-import { Question } from "../../../model/entity/question";
+import { Dto } from "../../../model/dto";
 
 
 export type IQuizQueries = {
-  myQuizzes(parent, args, context, info): Promise<Quiz[]>;
+  myQuizzes(parent, args, context, info): Promise<Dto.Output.Quiz[]>;
 };
 
 export type IQuizMutations = {
-  createQuiz(parent, args, context, info): Promise<Quiz>;
+  createQuiz(parent, args, context, info): Promise<Dto.Output.Quiz>;
 }
 
 export type IQuizTypeResolver = {
-  author(quiz: Quiz): Promise<User>;
-  questions(quiz: Quiz): Promise<Question[]>;
-  submissions(quiz: Quiz): Promise<QuizSubmission[]>;
+  author(quiz: Dto.Output.Quiz): Promise<Dto.Output.User>;
+  questions(quiz: Dto.Output.Quiz): Promise<Dto.Output.Question[]>;
+  submissions(quiz: Dto.Output.Quiz): Promise<Dto.Output.QuizSubmission[]>;
+}
+
+export type IQuizSubmissionTypeResolver = {
+  user(submission: Dto.Output.QuizSubmission): Promise<Dto.Output.User>;
+  quiz(submission: Dto.Output.QuizSubmission): Promise<Dto.Output.Quiz>;
 }
 
 export type IQuizResolver = IQueryResolver<IQuizQueries> & IMutatationResolver<IQuizMutations> & {
-  Quiz: IQuizTypeResolver
+  Quiz: IQuizTypeResolver;
+  QuizSubmission: IQuizSubmissionTypeResolver;
 };

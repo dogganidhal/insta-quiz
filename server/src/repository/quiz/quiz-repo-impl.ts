@@ -1,9 +1,8 @@
 import { IQuizRepository } from ".";
-import { Quiz } from "../../model/entity/quiz";
 import { injectable, inject } from "inversify";
-import { User } from "../../model/entity/user";
 import { Types } from "../../constants/types";
 import { Connection } from "typeorm";
+import { Entity } from "../../model/entity";
 
 
 @injectable()
@@ -11,12 +10,22 @@ export class QuizRepositoryImpl implements IQuizRepository {
 
   @inject(Types.DatabaseConnection) private readonly connection: Connection;
   
-  public async getQuizzesOfUser(user: User): Promise<Quiz[]> {
-    let repository = this.connection.getRepository(Quiz);
-    return await repository.find({author: user});
+  public async getQuizzesOfUser(userId: string): Promise<Entity.Quiz[]> {
+    let repository = this.connection.getRepository(Entity.Quiz);
+    return await repository.find({ authorId: userId });
   }
 
-  public async createQuiz(): Promise<Quiz> {
+  public async getQuizSubmissionForUser(userId: string): Promise<Entity.QuizSubmission[]> {
+    let repository = this.connection.getRepository(Entity.QuizSubmission);
+    return await repository.find({ userId: userId });
+  }
+
+  public async getQuizById(quizId: string): Promise<Entity.Quiz> {
+    let repository = this.connection.getRepository(Entity.Quiz);
+    return await repository.findOne({ id: quizId });
+  }
+
+  public async createQuiz(): Promise<Entity.Quiz> {
     throw new Error("Not implemented");
   }
 

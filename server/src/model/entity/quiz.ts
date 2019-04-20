@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from "typeorm";
 import { User } from "./user";
 
 
@@ -17,6 +17,10 @@ export class Quiz {
   @Column({nullable: true})
   public deadline?: Date;
 
+  @Column()
+  public authorId: string;
+
+  @JoinColumn()
   @ManyToOne(type => User, { nullable: false })
   public author: User;
 

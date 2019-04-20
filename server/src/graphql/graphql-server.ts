@@ -30,7 +30,8 @@ export class GraphQLServer {
       },
       {
         User: this.userResolver.User,
-        Quiz: this.quizResolver.Quiz
+        Quiz: this.quizResolver.Quiz,
+        QuizSubmission: this.quizResolver.QuizSubmission
       }
     );
   }

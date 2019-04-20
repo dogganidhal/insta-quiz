@@ -3,7 +3,7 @@ import { injectable, inject } from "inversify";
 import { IUserRepository } from "../../repository/user";
 import { Types } from "../../constants/types";
 import { verify } from "jsonwebtoken";
-import { User } from "../../entity/User";
+import { User } from "../../model/entity/user";
 
 
 @injectable()

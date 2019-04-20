@@ -1,19 +1,24 @@
-{
-  "synchronize": true,
-  "logger": "file",
-  "logging": false,
-  "entities": [
-    "src/entity/**/*.ts"
-  ],
-  "migrations": [
-    "src/migration/**/*.ts"
-  ],
-  "subscribers": [
-    "src/subscriber/**/*.ts"
-  ],
-  "cli": {
-    "entitiesDir": "src/entity",
-    "migrationsDir": "src/migration",
-    "subscribersDir": "src/subscriber"
+[
+  {
+    "name": "local",
+    "type": "postgres",
+    "url": "postgres://root:root@localhost:5432/insta_quiz",
+    "synchronize": true,
+    "logger": "file",
+    "logging": false,
+    "entities": [
+      "src/model/entity/**/*.ts"
+    ],
+    "migrations": [
+      "src/model/migration/**/*.ts"
+    ],
+    "subscribers": [
+      "src/model/subscriber/**/*.ts"
+    ],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
   }
-}
+]

@@ -5,4 +5,5 @@ export let Types = {
   IUserRepository: Symbol.for("IUserRepository"),
   IUserResolver: Symbol.for("IUserResolver"),
   AuthMiddleware: Symbol.for("AuthMiddleware"),
+  GraphQLServer: Symbol.for("GraphQLServer")
 }

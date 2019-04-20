@@ -75,10 +75,15 @@ type QuizQuestionSuggestion {
   suggestion: Suggestion!
 }
 
+type AuthCredentials {
+  accessToken: String!
+}
+
 type Query {
   me: User
+  login(token: String!): AuthCredentials!
 }
 
 type Mutation {
-  login(token: String!): String!
+  createQuiz: Quiz
 }

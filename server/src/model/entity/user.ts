@@ -13,7 +13,4 @@ export class User {
   @Column({nullable: false, unique: true})
   public email: string;
 
-  @Column({nullable: false})
-  public googleAccessToken: string;
-
 }

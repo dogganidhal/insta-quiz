@@ -6,7 +6,7 @@ import * as bodyParser from "body-parser";
 import * as express from "express";
 import { config } from "dotenv";
 import { AuthMiddleware } from './graphql/middleware/auth-middleware';
-import { createConnection, Connection } from 'typeorm';
+import { createConnection, Connection, getConnectionOptions } from 'typeorm';
 import { IUserResolver } from './graphql/resolvers';
 import { UserResolver } from './graphql/resolvers/user-resolver';
 import { UserRepositoryImpl } from './repository/user/user-repo-impl';
@@ -20,9 +20,9 @@ async function main() {
   container.bind<IUserRepository>(Types.IUserRepository).to(UserRepositoryImpl);
   container.bind<IUserResolver>(Types.IUserResolver).to(UserResolver);
   container.bind<AuthMiddleware>(Types.AuthMiddleware).to(AuthMiddleware);
-  container.bind<GraphQLServer>("GraphQLServer").to(GraphQLServer);
+  container.bind<GraphQLServer>(Types.GraphQLServer).to(GraphQLServer);
 
-  let connection = await createConnection();
+  let connection = await createConnection(process.env.DB_CONFIG);
   container.bind<Connection>(Types.DatabaseConnection).toConstantValue(connection);
 
   let app = express();
@@ -30,7 +30,7 @@ async function main() {
     extended: true
   }));
   app.use(bodyParser.json());
-  let graphQLServer = container.get<GraphQLServer>("GraphQLServer");
+  let graphQLServer = container.get<GraphQLServer>(Types.GraphQLServer);
 
   graphQLServer.run(app, process.env.PORT);
 

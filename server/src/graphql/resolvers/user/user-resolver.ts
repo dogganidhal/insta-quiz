@@ -7,7 +7,7 @@ import { Constants } from "../../../constants/constants";
 import { User } from "../../../model/entity/user";
 import { sign } from "jsonwebtoken";
 import { AuthCredentials } from "../../../model/dto/output/auth-credentials";
-import { IUserMutations, IUserQueries, IUserResolver } from ".";
+import { IUserMutations, IUserQueries, IUserResolver, IUserTypeResolver } from ".";
 
 
 @injectable()
@@ -35,6 +35,12 @@ export class UserResolver implements IUserResolver {
       },
     };
   };
+
+  public get User(): IUserTypeResolver {
+    return {
+      quizSubmissions: (user: User) => null
+    };
+  }
 
   private async login(googleAccessToken: string): Promise<User> {
     let oAuthClient = new OAuth2Client(process.env.GOOGLE_OAUTH2_CLIENTID);

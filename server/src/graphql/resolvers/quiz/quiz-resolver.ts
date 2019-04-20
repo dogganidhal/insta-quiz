@@ -3,7 +3,8 @@ import { InsertQuizInput } from "../../../model/dto/input/insert-quiz";
 import { Types } from "../../../constants/types";
 import { IQuizRepository } from "../../../repository/quiz";
 import { User } from "../../../model/entity/user";
-import { IQuizResolver, IQuizQueries, IQuizMutations } from ".";
+import { IQuizResolver, IQuizQueries, IQuizMutations, IQuizTypeResolver } from ".";
+import { Quiz } from "../../../model/entity/quiz";
 
 
 @injectable()
@@ -29,6 +30,20 @@ export class QuizResolver implements IQuizResolver {
         
         return await this.quizRepository.createQuiz();
 
+      }
+    };
+  };
+
+  public get Quiz(): IQuizTypeResolver {
+    return {
+      author: (quiz: Quiz) => {
+        throw new Error("Not implemented");
+      },
+      questions: (quiz: Quiz) => {
+        throw new Error("Not implemented");
+      },
+      submissions: (quiz: Quiz) => {
+        throw new Error("Not implemented");
       }
     };
   };

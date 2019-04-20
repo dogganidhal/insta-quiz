@@ -17,16 +17,22 @@ export class GraphQLServer {
   @inject(Types.AuthMiddleware) private readonly authMiddleware: AuthMiddleware;
 
   public get resolvers(): IResolvers {
-    return {
-      Query: merge(
-        this.userResolver.queries,
-        this.quizResolver.queries
-      ),
-      Mutation: merge(
-        this.userResolver.mutations,
-        this.quizResolver.mutations
-      )
-    };
+    return merge(
+      {
+        Query: merge(
+          this.userResolver.queries,
+          this.quizResolver.queries
+        ),
+        Mutation: merge(
+          this.userResolver.mutations,
+          this.quizResolver.mutations
+        )
+      },
+      {
+        User: this.userResolver.User,
+        Quiz: this.quizResolver.Quiz
+      }
+    );
   }
 
   public run(app: express.Application, port: string = "3000") {

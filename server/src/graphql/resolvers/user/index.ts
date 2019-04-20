@@ -1,6 +1,7 @@
 import { IQueryResolver, IMutatationResolver } from "..";
 import { AuthCredentials } from "../../../model/dto/output/auth-credentials";
 import { User } from "../../../model/entity/user";
+import { QuizSubmission } from "../../../model/entity/quiz_submission";
 
 
 export type IUserQueries = {
@@ -12,4 +13,10 @@ export type IUserMutations = {
   
 }
 
-export type IUserResolver = IQueryResolver<IUserQueries> & IMutatationResolver<IUserMutations>;
+export type IUserTypeResolver = {
+  quizSubmissions(user: User): Promise<QuizSubmission[]>;
+}
+
+export type IUserResolver = IQueryResolver<IUserQueries> & IMutatationResolver<IUserMutations> & {
+  User: IUserTypeResolver
+};

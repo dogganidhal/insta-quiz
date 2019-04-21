@@ -14,6 +14,7 @@ export type ISubmissionTypeResolver = {
   user(submission: Dto.Output.Submission): Promise<Dto.Output.User>;
   quiz(submission: Dto.Output.Submission): Promise<Dto.Output.Quiz>;
   answers(submission: Dto.Output.Submission): Promise<Dto.Output.Answer[]>;
+  score(submission: Dto.Output.Submission): Promise<Dto.Output.Score>;
 }
 
 export type IAnswerTypeResolver = {

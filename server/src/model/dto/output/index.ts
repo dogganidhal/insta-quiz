@@ -5,6 +5,7 @@ import * as QuestionDto from "./question";
 import * as QuizSubmissionDto from "./submission";
 import * as QuizDto from "./quiz";
 import * as SuggestionDto from './suggestion';
+import * as ScoreDto from "./score";
 
 export module Output {
 
@@ -15,5 +16,6 @@ export module Output {
   export import Submission = QuizSubmissionDto.Submission;
   export import Quiz = QuizDto.Quiz;
   export import Suggestion = SuggestionDto.Suggestion;
+  export import Score = ScoreDto.Score;
 
 }

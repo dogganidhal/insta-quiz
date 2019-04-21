@@ -6,6 +6,11 @@ enum QuestionType {
   INPUT
 }
 
+enum QuizType {
+  MCQ
+  MIXED
+}
+
 type User {
   id: ID!
   fullName: String
@@ -17,6 +22,7 @@ type Quiz {
   id: ID!
   title: String!
   description: String!
+  type: QuizType!
   authorId: ID!
   author: User!
   deadline: GraphQLDateTime
@@ -40,7 +46,11 @@ type Suggestion {
   question: Question!
   content: String
   imageUrl: String
-  isCorrect: Boolean!
+}
+
+type Score {
+  points: Int!
+  totalPoints: Int!
 }
 
 type Submission {
@@ -50,6 +60,7 @@ type Submission {
   quizId: ID!
   quiz: Quiz!
   answers: [Answer]
+  score: Score!
 }
 
 type Answer {
@@ -79,7 +90,7 @@ type Mutation {
 
 input InsertQuizInput {
   title: String!
-  description: String!
+  description: String
   deadline: GraphQLDateTime
   questions: [InsertQuestionInput]!
 }
@@ -87,13 +98,8 @@ input InsertQuizInput {
 input InsertQuestionInput {
   content: String!
   type: QuestionType!
+  points: Int
   suggestions: [InsertSuggestionInput]
-}
-
-input InsertSuggestionInput {
-  content: String
-  imageUrl: String
-  isCorrect: Boolean
 }
 
 input InsertSubmissionInput {
@@ -104,4 +110,11 @@ input InsertSubmissionInput {
 input InsertAnswerInput {
   content: String
   suggestionId: ID
+  questionId: ID!
+}
+
+input InsertSuggestionInput {
+  content: String
+  imageUrl: String
+  isCorrect: Boolean!
 }

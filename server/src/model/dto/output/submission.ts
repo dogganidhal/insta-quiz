@@ -2,6 +2,7 @@ import { User } from "./user";
 import { Quiz } from "./quiz";
 import { Entity } from "../../entity";
 import { Answer } from "./answer";
+import { Score } from "./score";
 
 
 /*
@@ -23,6 +24,7 @@ export class Submission {
   public quizId: string;
   public quiz: Quiz;
   public answers: Answer[];
+  public score: Score;
 
   constructor(submission: Entity.Submission)
   constructor(submission: Entity.Submission, answers?: Entity.Answer[]) {

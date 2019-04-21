@@ -27,8 +27,6 @@ export class QuizResolverImpl implements IQuizResolver {
           let quiz = await this.quizRepository.getQuizById(args.id);
           if (!quiz)
             throw QuizNotFoundException(args.id);
-          if (quiz.authorId !== context.user.id)
-            throw UnauthorizedException;
           return [new Dto.Output.Quiz(quiz)];
         }
 

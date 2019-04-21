@@ -1,6 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from "typeorm";
 import { User } from "./user";
 
+export enum QuizType {
+  MCQ = "MCQ",
+  MIXED = "MIXED"
+}
+
 
 @Entity()
 export class Quiz {
@@ -16,6 +21,9 @@ export class Quiz {
 
   @Column({nullable: true})
   public deadline?: Date;
+
+  @Column({ default: QuizType.MIXED })
+  public type: QuizType;
 
   @Column()
   public authorId: string;

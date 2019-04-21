@@ -20,6 +20,10 @@ export function InvalidSingleChoiceAnswer(questionId: string): ApolloError {
   return new ApolloError(`Question with id '${questionId}' is a single choice question`, "INVALID_SIGNLE_CHOICE_ANSWER");
 }
 
+export function InconsistentAnswerException(questionId: string): ApolloError {
+  return new ApolloError(`Answer to the question with id '${questionId}' is inconsistent, check the suggestions you picked or the question type`, "INCONSISTENT_ANSWER");
+}
+
 export let UnauthenticatedException: ApolloError = new AuthenticationError('Missing or invalid authorization header');
 
 export let UnauthorizedException: ApolloError = new ApolloError("Access denied to resource", "FORBIDDEN");

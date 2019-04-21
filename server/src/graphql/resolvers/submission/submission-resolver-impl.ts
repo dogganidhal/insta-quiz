@@ -25,10 +25,10 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
           throw UnauthenticatedException;
 
         if (args.id) {
-          let submission = await this.submissionRepository.getSubmissionById(args.id);
+          let submission = await this.submissionRepository.getSubmissionById(args.id, ["quiz"]);
           if (!submission)
             throw SubmissionNotFoundException(args.id);
-          if (submission.userId !== context.user.id)
+          if (submission.userId !== context.user.id || submission.quiz.authorId !== context.user.id)
             throw UnauthorizedException;
           return [new Dto.Output.Submission(submission)];
         }
@@ -47,8 +47,7 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
         if (!context.user)
           throw UnauthenticatedException;
 
-        let submission = await this.submissionManager.submit(args.submissionData, context.user);
-        return new Dto.Output.Submission(submission);
+        return await this.submissionManager.submit(args.submissionData, context.user);
 
       }
     };
@@ -67,7 +66,8 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
       answers: async (submission: Dto.Output.Submission) => {
         let answers = await this.submissionRepository.getAnswersBySubmissionId(submission.id);
         return answers.map(answer => new Dto.Output.Answer(answer));
-      }
+      },
+      score: async submission => submission.score
     };
   };
 

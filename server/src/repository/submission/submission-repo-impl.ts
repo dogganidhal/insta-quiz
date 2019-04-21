@@ -12,17 +12,17 @@ export class SubmissionRepositoryImpl implements ISubmissionRepository {
 
   public async getAnswersBySubmissionId(submissionId: string): Promise<Entity.Answer[]> {
     let repository = this.connection.getRepository(Entity.Answer);
-    return repository.find({ submissionId: submissionId });
+    return repository.find({ submissionId });
   }
 
-  public async getSubmissionById(id: string): Promise<Entity.Submission> {
+  public async getSubmissionById(id: string, relations?: string[]): Promise<Entity.Submission> {
     let repository = this.connection.getRepository(Entity.Submission);
-    return repository.findOne({ id: id });
+    return repository.findOne({ id }, { relations });
   }
 
   public async getSubmissionsByUserId(userId: string): Promise<Entity.Submission[]> {
     let repository = this.connection.getRepository(Entity.Submission);
-    return repository.find({ userId: userId });
+    return repository.find({ userId });
   }
 
   public async createSubmission(submission: Entity.Submission): Promise<Entity.Submission> {

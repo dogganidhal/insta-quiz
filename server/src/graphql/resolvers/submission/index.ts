@@ -3,7 +3,7 @@ import { Dto } from "../../../model/dto";
 
 
 export type ISubmissionQueries = {
-  Submission(parent, args, context, info): Promise<Dto.Output.Submission[]>;
+  submission(parent, args, context, info): Promise<Dto.Output.Submission[]>;
 };
 
 export type ISubmissionMutations = {
@@ -16,6 +16,12 @@ export type ISubmissionTypeResolver = {
   answers(submission: Dto.Output.Submission): Promise<Dto.Output.Answer[]>;
 }
 
+export type IAnswerTypeResolver = {
+  submission(answer: Dto.Output.Answer): Promise<Dto.Output.Submission>;
+  suggestion(answer: Dto.Output.Answer): Promise<Dto.Output.Suggestion>;
+}
+
 export type ISubmissionResolver = IQueryResolver<ISubmissionQueries> & IMutatationResolver<ISubmissionMutations> & {
-  Submission: ISubmissionTypeResolver
+  Submission: ISubmissionTypeResolver;
+  Answer: IAnswerTypeResolver;
 };

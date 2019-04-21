@@ -1,4 +1,4 @@
-import { ISubmissionResolver, ISubmissionQueries, ISubmissionMutations, ISubmissionTypeResolver } from ".";
+import { ISubmissionResolver, ISubmissionQueries, ISubmissionMutations, ISubmissionTypeResolver, IAnswerTypeResolver } from ".";
 import { injectable, inject } from "inversify";
 import { Dto } from "../../../model/dto";
 import { UnauthenticatedException, SubmissionNotFoundException, UnauthorizedException } from "../../../exceptions";
@@ -19,7 +19,7 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
   
   public get queries(): ISubmissionQueries {
     return {
-      Submission: async (parent, args: { id?: string }, context) => {
+      submission: async (parent, args: { id?: string }, context) => {
 
         if (!context.user)
           throw UnauthenticatedException;
@@ -70,5 +70,18 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
       }
     };
   };
+
+  public get Answer(): IAnswerTypeResolver {
+    return {
+      suggestion: async (answer: Dto.Output.Answer) => {
+        let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
+        return new Dto.Output.Suggestion(suggestion);
+      },
+      submission: async (answer: Dto.Output.Answer) => {
+        let submission = await this.submissionRepository.getSubmissionById(answer.submissionId);
+        return new Dto.Output.Submission(submission);
+      }
+    };
+  }
 
 }

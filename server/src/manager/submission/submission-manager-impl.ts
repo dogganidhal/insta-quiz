@@ -55,8 +55,12 @@ export class SubmissionManagerImpl implements ISubmissionManager {
 
         let suggestions = await this.quizRepository.getSuggestionsByQuestionId(question.id);
         let userAnswers = answers.filter(answer => suggestions.map(s => s.id).includes(answer.suggestionId));
+        
+        let questionAnswered = userAnswers !== undefined;
+        questionAnswered = questionAnswered && (question.type === QuestionType.INPUT && userAnswers.length === 0);
+        questionAnswered = questionAnswered && (question.type !== QuestionType.INPUT && userAnswers.filter(a => a.content !== undefined).length > 0);
 
-        if (!userAnswers || (question.type !== QuestionType.INPUT && userAnswers.length === 0))
+        if (!questionAnswered)
           throw UnansweredQuestionException(question.id);
 
         if (question.type === QuestionType.SINGLE_CHOICE && userAnswers.length > 1)
@@ -64,7 +68,7 @@ export class SubmissionManagerImpl implements ISubmissionManager {
 
         for (let answer of userAnswers) {
 
-          let suggestion = suggestions.find(suggestion => suggestions.map(s => s.id).includes(answer.suggestionId));
+          let suggestion = suggestions.find(suggestion => answer.suggestionId === suggestion.id);
           if (!suggestion)
             throw UnansweredQuestionException(question.id);
 

@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import { Types } from "../../../constants/types";
 import { IQuizRepository } from "../../../repository/quiz";
-import { IQuizResolver, IQuizQueries, IQuizMutations, IQuizTypeResolver, IQuestionTypeResolver } from ".";
+import { IQuizResolver, IQuizQueries, IQuizMutations, IQuizTypeResolver, IQuestionTypeResolver, ISuggestionTypeResolver } from ".";
 import { Dto } from "../../../model/dto";
 import { Entity } from "../../../model/entity";
 import { IUserRepository } from "../../../repository/user";
@@ -18,7 +18,7 @@ export class QuizResolverImpl implements IQuizResolver {
   
   public get queries(): IQuizQueries {
     return {
-      Quiz: async (parent, args: { id?: string }, context) => {
+      quiz: async (parent, args: { id?: string }, context) => {
 
         if (!context.user) 
           throw UnauthenticatedException;
@@ -88,6 +88,15 @@ export class QuizResolverImpl implements IQuizResolver {
         return answers.map(answer => new Dto.Output.Answer(answer));
       }
     }
+  }
+
+  public get Suggestion(): ISuggestionTypeResolver {
+    return {
+      question: async (suggestion: Dto.Output.Suggestion) => {
+        let question = await this.quizRepository.getQuestionById(suggestion.questionId);
+        return new Dto.Output.Question(question);
+      }
+    };
   }
 
 }

@@ -3,7 +3,7 @@ import { Dto } from "../../../model/dto";
 
 
 export type IQuizQueries = {
-  Quiz(parent, args, context, info): Promise<Dto.Output.Quiz[]>;
+  quiz(parent, args, context, info): Promise<Dto.Output.Quiz[]>;
 };
 
 export type IQuizMutations = {
@@ -22,7 +22,12 @@ export type IQuestionTypeResolver = {
   answers(question: Dto.Output.Question): Promise<Dto.Output.Answer[]>;
 }
 
+export type ISuggestionTypeResolver = {
+  question(suggestion: Dto.Output.Suggestion): Promise<Dto.Output.Question>;
+}
+
 export type IQuizResolver = IQueryResolver<IQuizQueries> & IMutatationResolver<IQuizMutations> & {
   Quiz: IQuizTypeResolver;
   Question: IQuestionTypeResolver;
+  Suggestion: ISuggestionTypeResolver;
 };

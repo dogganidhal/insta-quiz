@@ -68,8 +68,8 @@ type AuthCredentials {
 type Query {
   me: User
   login(token: String!): AuthCredentials!
-  Quiz(id: ID): [Quiz]!
-  Submission(id: ID): [Submission]!
+  quiz(id: ID): [Quiz]!
+  submission(id: ID): [Submission]!
 }
 
 type Mutation {

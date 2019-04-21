@@ -37,7 +37,8 @@ export class QuizManagerImpl implements IQuizManager {
       content: question.content,
       type: question.type,
       quiz: quiz,
-      quizId: quiz.id
+      quizId: quiz.id,
+      points: question.points
     }));
 
     await Promise.all(

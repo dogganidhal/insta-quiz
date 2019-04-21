@@ -25,6 +25,9 @@ export class Question {
   @Column()
   public quizId: string;
 
+  @Column({ default: 1 })
+  public points: number;
+
   @JoinColumn()
   @ManyToOne(type => Quiz, { nullable: false, cascade: true })
   public quiz: Quiz;

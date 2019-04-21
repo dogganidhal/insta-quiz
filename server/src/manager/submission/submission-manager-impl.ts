@@ -100,8 +100,8 @@ export class SubmissionManagerImpl implements ISubmissionManager {
       let correctAnswer = correctSuggestionIds
         .map(suggestionId => answerSuggestionIds.includes(suggestionId))
         .reduce((previous, current) => previous && current, true);
-      totalPoints += 1;
-      points += correctAnswer ? 1 : 0; // TODO: Change this to the correct points
+      totalPoints += question.points;
+      points += correctAnswer ? question.points : 0;
     }
 
     return new Dto.Output.Score({

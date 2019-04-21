@@ -9,4 +9,7 @@ export let Types = {
   AuthMiddleware: Symbol.for("AuthMiddleware"),
   GraphQLServer: Symbol.for("GraphQLServer"),
   IQuizManager: Symbol.for("IQuizManager"),
+  IAuthManager: Symbol.for("IAuthManager"),
+  ISubmissionResolver: Symbol.for("ISubmissionResolver"),
+  ISubmissionRepository: Symbol.for("ISubmissionRepository")
 }

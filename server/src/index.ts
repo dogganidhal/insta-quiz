@@ -8,15 +8,21 @@ import { config } from "dotenv";
 import { AuthMiddleware } from './graphql/middleware/auth-middleware';
 import { createConnection, Connection } from 'typeorm';
 import { IUserResolver } from './graphql/resolvers/user';
-import { UserResolver } from './graphql/resolvers/user/user-resolver';
+import { UserResolverImpl } from './graphql/resolvers/user/user-resolver-impl';
 import { UserRepositoryImpl } from './repository/user/user-repo-impl';
 import { IUserRepository } from './repository/user';
-import { QuizResolver } from './graphql/resolvers/quiz/quiz-resolver';
+import { QuizResolverImpl } from './graphql/resolvers/quiz/quiz-resolver-impl';
 import { IQuizRepository } from './repository/quiz';
 import { QuizRepositoryImpl } from './repository/quiz/quiz-repo-impl';
 import { IQuizResolver } from './graphql/resolvers/quiz';
 import { IQuizManager } from './manager/quiz';
 import { QuizManagerImpl } from './manager/quiz/quiz-manager-impl';
+import { IAuthManager } from './manager/auth';
+import { AuthManagerImpl } from './manager/auth/auth-manager-impl';
+import { ISubmissionResolver } from './graphql/resolvers/submission';
+import { SubmissionResolverImpl } from './graphql/resolvers/submission/submission-resolver-impl';
+import { ISubmissionRepository } from './repository/submission';
+import { SubmissionRepositoryImpl } from './repository/submission/submission-repo-impl';
 
 async function main() {
 
@@ -25,9 +31,12 @@ async function main() {
 
   container.bind<IUserRepository>(Types.IUserRepository).to(UserRepositoryImpl);
   container.bind<IQuizRepository>(Types.IQuizRepository).to(QuizRepositoryImpl);
+  container.bind<ISubmissionRepository>(Types.ISubmissionRepository).to(SubmissionRepositoryImpl);
   container.bind<IQuizManager>(Types.IQuizManager).to(QuizManagerImpl);
-  container.bind<IUserResolver>(Types.IUserResolver).to(UserResolver);
-  container.bind<IQuizResolver>(Types.IQuizResolver).to(QuizResolver);
+  container.bind<IAuthManager>(Types.IAuthManager).to(AuthManagerImpl);
+  container.bind<IUserResolver>(Types.IUserResolver).to(UserResolverImpl);
+  container.bind<IQuizResolver>(Types.IQuizResolver).to(QuizResolverImpl);
+  container.bind<ISubmissionResolver>(Types.ISubmissionResolver).to(SubmissionResolverImpl);
   container.bind<AuthMiddleware>(Types.AuthMiddleware).to(AuthMiddleware);
   container.bind<GraphQLServer>(Types.GraphQLServer).to(GraphQLServer);
 

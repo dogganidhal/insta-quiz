@@ -68,28 +68,40 @@ type AuthCredentials {
 type Query {
   me: User
   login(token: String!): AuthCredentials!
-  myQuizzes: [Quiz]
+  Quiz(id: ID): [Quiz]!
+  Submission(id: ID): [Submission]!
 }
 
 type Mutation {
-  createQuiz(quizData: InsertQuizObject): Quiz
+  createQuiz(quizData: InsertQuizInput): Quiz
+  submit(submissionData: InsertSubmissionInput): Submission
 }
 
-input InsertQuizObject {
+input InsertQuizInput {
   title: String!
   description: String!
   deadline: GraphQLDateTime
-  questions: [InsertQuestionObject]!
+  questions: [InsertQuestionInput]!
 }
 
-input InsertQuestionObject {
+input InsertQuestionInput {
   content: String!
   type: QuestionType!
-  suggestions: [InsertSuggestionObject]
+  suggestions: [InsertSuggestionInput]
 }
 
-input InsertSuggestionObject {
+input InsertSuggestionInput {
   content: String
   imageUrl: String
   isCorrect: Boolean
+}
+
+input InsertSubmissionInput {
+  quizId: ID!
+  answers: [InsertAnswerInput]!
+}
+
+input InsertAnswerInput {
+  content: String
+  suggestionId: ID
 }

@@ -3,7 +3,7 @@ import { Dto } from "../../../model/dto";
 
 
 export type IQuizQueries = {
-  myQuizzes(parent, args, context, info): Promise<Dto.Output.Quiz[]>;
+  Quiz(parent, args, context, info): Promise<Dto.Output.Quiz[]>;
 };
 
 export type IQuizMutations = {
@@ -16,11 +16,6 @@ export type IQuizTypeResolver = {
   submissions(quiz: Dto.Output.Quiz): Promise<Dto.Output.Submission[]>;
 }
 
-export type ISubmissionTypeResolver = {
-  user(submission: Dto.Output.Submission): Promise<Dto.Output.User>;
-  quiz(submission: Dto.Output.Submission): Promise<Dto.Output.Quiz>;
-}
-
 export type IQuestionTypeResolver = {
   quiz(question: Dto.Output.Question): Promise<Dto.Output.Quiz>;
   suggestions(question: Dto.Output.Question): Promise<Dto.Output.Suggestion[]>;
@@ -29,6 +24,5 @@ export type IQuestionTypeResolver = {
 
 export type IQuizResolver = IQueryResolver<IQuizQueries> & IMutatationResolver<IQuizMutations> & {
   Quiz: IQuizTypeResolver;
-  Submission: ISubmissionTypeResolver;
   Question: IQuestionTypeResolver;
 };

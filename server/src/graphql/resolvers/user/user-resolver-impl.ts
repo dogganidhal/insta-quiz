@@ -2,20 +2,18 @@ import { inject, injectable } from "inversify";
 import { Types } from "../../../constants/types";
 import { IUserRepository } from "../../../repository/user";
 import { UnauthenticatedException, UnauthorizedException } from "../../../exceptions";
-import { OAuth2Client  } from "google-auth-library";
-import { Constants } from "../../../constants/constants";
-import { sign } from "jsonwebtoken";
 import { IUserMutations, IUserQueries, IUserResolver, IUserTypeResolver } from ".";
 import { Dto } from "../../../model/dto";
-import { Entity } from "../../../model/entity";
 import { IQuizRepository } from "../../../repository/quiz";
+import { IAuthManager } from "../../../manager/auth";
 
 
 @injectable()
-export class UserResolver implements IUserResolver {
+export class UserResolverImpl implements IUserResolver {
 
   @inject(Types.IUserRepository) private readonly userRepository: IUserRepository;
   @inject(Types.IQuizRepository) private readonly quizRepository: IQuizRepository;
+  @inject(Types.IAuthManager) private readonly authManager: IAuthManager;
 
   public get mutations(): IUserMutations {
     return {
@@ -26,9 +24,7 @@ export class UserResolver implements IUserResolver {
   public get queries(): IUserQueries {
     return {
       login: async (_, args: { token: string }) => {
-        let user = await this.login(args.token);
-        let accessToken = await this.signJwt(user);
-        return new Dto.Output.AuthCredentials(accessToken);
+        return await this.authManager.loginWithGoogle(args.token);
       },
       me: async (_, args, context) => {
         if (!context.user)
@@ -46,31 +42,6 @@ export class UserResolver implements IUserResolver {
         return submissions.map(submission => new Dto.Output.Submission(submission));
       }
     };
-  }
-
-  private async login(googleAccessToken: string): Promise<Entity.User> {
-    let oAuthClient = new OAuth2Client(process.env.GOOGLE_OAUTH2_CLIENTID);
-    try {
-      let ticket = await oAuthClient.verifyIdToken({
-        idToken: googleAccessToken,
-        audience: process.env.GOOGLE_OAUTH2_CLIENTID,
-      });
-      let payload = ticket.getPayload();
-      if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) { // TODO: Replace with proper validation logic
-        throw UnauthorizedException;  
-      }
-      return this.userRepository.getOrCreateUser(payload.email, payload.name);
-    } catch (exception) {
-      throw UnauthorizedException;
-    }
-  }
-
-  private async signJwt(user: Entity.User): Promise<string> {
-    return await sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '30d' }
-    )
   }
 
 }

@@ -1,16 +1,16 @@
 import { injectable, inject } from "inversify";
 import { Types } from "../../../constants/types";
 import { IQuizRepository } from "../../../repository/quiz";
-import { IQuizResolver, IQuizQueries, IQuizMutations, IQuizTypeResolver, ISubmissionTypeResolver, IQuestionTypeResolver } from ".";
+import { IQuizResolver, IQuizQueries, IQuizMutations, IQuizTypeResolver, IQuestionTypeResolver } from ".";
 import { Dto } from "../../../model/dto";
 import { Entity } from "../../../model/entity";
 import { IUserRepository } from "../../../repository/user";
 import { IQuizManager } from "../../../manager/quiz";
-import { UnauthenticatedException } from "../../../exceptions";
+import { UnauthenticatedException, QuizNotFoundException, UnauthorizedException } from "../../../exceptions";
 
 
 @injectable()
-export class QuizResolver implements IQuizResolver {
+export class QuizResolverImpl implements IQuizResolver {
 
   @inject(Types.IQuizRepository) private readonly quizRepository: IQuizRepository;
   @inject(Types.IUserRepository) private readonly userRepository: IUserRepository;
@@ -18,10 +18,19 @@ export class QuizResolver implements IQuizResolver {
   
   public get queries(): IQuizQueries {
     return {
-      myQuizzes: async (parent, args, context) => {
+      Quiz: async (parent, args: { id?: string }, context) => {
 
         if (!context.user) 
           throw UnauthenticatedException;
+
+        if (args.id) {
+          let quiz = await this.quizRepository.getQuizById(args.id);
+          if (!quiz)
+            throw QuizNotFoundException(args.id);
+          if (quiz.authorId !== context.user.id)
+            throw UnauthorizedException;
+          return [new Dto.Output.Quiz(quiz)];
+        }
 
         let user: Entity.User = context.user;
         let quizzes = await this.quizRepository.getQuizzesOfUser(user.id);
@@ -63,19 +72,6 @@ export class QuizResolver implements IQuizResolver {
       }
     };
   };
-
-  public get Submission(): ISubmissionTypeResolver {
-    return {
-      user: async (submission: Dto.Output.Submission) => {
-        let user = await this.userRepository.getUserById(submission.userId);
-        return new Dto.Output.User(user);
-      },
-      quiz: async (submission: Dto.Output.Submission) => {
-        let quiz = await this.quizRepository.getQuizById(submission.quizId);
-        return new Dto.Output.Quiz(quiz);
-      }
-    };
-  }
 
   public get Question(): IQuestionTypeResolver {
     return {

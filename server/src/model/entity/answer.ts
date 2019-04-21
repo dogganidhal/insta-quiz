@@ -9,7 +9,7 @@ export class Answer {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   public content: string;
 
   @Column()
@@ -27,8 +27,8 @@ export class Answer {
   public suggestion: Suggestion;
 
   constructor()
-  constructor(data: Answer)
-  constructor(data?: Answer) {
+  constructor(data: Partial<Answer>)
+  constructor(data?: Partial<Answer>) {
     if (data) {
       Object.assign(this, data);
     }

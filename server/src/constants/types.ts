@@ -11,5 +11,6 @@ export let Types = {
   IQuizManager: Symbol.for("IQuizManager"),
   IAuthManager: Symbol.for("IAuthManager"),
   ISubmissionResolver: Symbol.for("ISubmissionResolver"),
-  ISubmissionRepository: Symbol.for("ISubmissionRepository")
+  ISubmissionRepository: Symbol.for("ISubmissionRepository"),
+  ISubmissionManager: Symbol.for("ISubmissionManager")
 }

@@ -6,6 +6,7 @@ import { Types } from "../../../constants/types";
 import { ISubmissionRepository } from "../../../repository/submission";
 import { IUserRepository } from "../../../repository/user";
 import { IQuizRepository } from "../../../repository/quiz";
+import { ISubmissionManager } from "../../../manager/submission";
 
 
 @injectable()
@@ -14,6 +15,7 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
   @inject(Types.IQuizRepository) private readonly quizRepository: IQuizRepository;
   @inject(Types.IUserRepository) private readonly userRepository: IUserRepository;
   @inject(Types.ISubmissionRepository) private readonly submissionRepository: ISubmissionRepository;
+  @inject(Types.ISubmissionManager) private readonly submissionManager: ISubmissionManager;
   
   public get queries(): ISubmissionQueries {
     return {
@@ -42,7 +44,12 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
     return {
       submit: async (parent, args: { submissionData: Dto.Input.InsertSubmissionInput }, context) => {
         
-        return null;
+        if (!context.user)
+          throw UnauthenticatedException;
+
+        let submission = await this.submissionManager.submit(args.submissionData, context.user);
+        return new Dto.Output.Submission(submission);
+
       }
     };
   };

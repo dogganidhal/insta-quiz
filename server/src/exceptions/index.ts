@@ -4,15 +4,21 @@ export function QuizNotFoundException(todoId: string): ApolloError {
   return new ApolloError(`No quiz with id '${todoId}' was found`, "QUIZ_NOT_FOUND");
 }
 
-export function UserAleadyExistsException(email: string): ApolloError {
-  return new ApolloError(`User with email '${email}' already exists`, "USER_ALREADY_EXISTS");
+export function QuizAleadySubmittedException(quizId: string): ApolloError {
+  return new ApolloError(`Quiz with id '${quizId}' has been already submitted`, "QUIZ_ALREADY_SUBMITTED");
 }
 
 export function SubmissionNotFoundException(id: string): ApolloError {
   return new ApolloError(`No submission with id '${id}' was found`, "SUBMISSION_NOT_FOUND");
 }
 
-export let WrongPasswordException: ApolloError = new ApolloError(`Password does not match our records`, "WRONG_PASSWORD");
+export function UnansweredQuestionException(questionId: string): ApolloError {
+  return new ApolloError(`Question with id '${questionId}' has not been answered`, "UNANSWERED_QUESTION");
+}
+
+export function InvalidSingleChoiceAnswer(questionId: string): ApolloError {
+  return new ApolloError(`Question with id '${questionId}' is a single choice question`, "INVALID_SIGNLE_CHOICE_ANSWER");
+}
 
 export let UnauthenticatedException: ApolloError = new AuthenticationError('Missing or invalid authorization header');
 

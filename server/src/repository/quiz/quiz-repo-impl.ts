@@ -60,4 +60,9 @@ export class QuizRepositoryImpl implements IQuizRepository {
     return await repository.find({ questionId: questionId });
   }
 
+  public async getSubmissionByUserIdAndQuizId(userId: string, quizId: string): Promise<Entity.Submission> {
+    let repository = this.connection.getRepository(Entity.Submission);
+    return await repository.findOne({ quizId, userId });
+  }
+
 }

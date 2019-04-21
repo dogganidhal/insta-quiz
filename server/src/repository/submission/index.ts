@@ -2,7 +2,9 @@ import { Entity } from "../../model/entity";
 
 
 export interface ISubmissionRepository {
+  createSubmission(submission: Entity.Submission): Promise<Entity.Submission>;
   getSubmissionById(id: string): Promise<Entity.Submission>;
   getSubmissionsByUserId(userId: string): Promise<Entity.Submission[]>;
   getAnswersBySubmissionId(submissionId: string): Promise<Entity.Answer[]>;
+  saveAnswers(answers: Entity.Answer[]): Promise<void>;
 }

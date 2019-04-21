@@ -23,6 +23,8 @@ import { ISubmissionResolver } from './graphql/resolvers/submission';
 import { SubmissionResolverImpl } from './graphql/resolvers/submission/submission-resolver-impl';
 import { ISubmissionRepository } from './repository/submission';
 import { SubmissionRepositoryImpl } from './repository/submission/submission-repo-impl';
+import { ISubmissionManager } from './manager/submission';
+import { SubmissionManagerImpl } from './manager/submission/submission-manager-impl';
 
 async function main() {
 
@@ -34,6 +36,7 @@ async function main() {
   container.bind<ISubmissionRepository>(Types.ISubmissionRepository).to(SubmissionRepositoryImpl);
   container.bind<IQuizManager>(Types.IQuizManager).to(QuizManagerImpl);
   container.bind<IAuthManager>(Types.IAuthManager).to(AuthManagerImpl);
+  container.bind<ISubmissionManager>(Types.ISubmissionManager).to(SubmissionManagerImpl);
   container.bind<IUserResolver>(Types.IUserResolver).to(UserResolverImpl);
   container.bind<IQuizResolver>(Types.IQuizResolver).to(QuizResolverImpl);
   container.bind<ISubmissionResolver>(Types.ISubmissionResolver).to(SubmissionResolverImpl);

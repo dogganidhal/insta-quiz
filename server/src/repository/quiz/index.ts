@@ -2,6 +2,7 @@ import { Entity } from "../../model/entity";
 
 
 export interface IQuizRepository {
+  getSubmissionByUserIdAndQuizId(id: string, quizId: string): Promise<Entity.Submission>;
   getAnswersByQuestionId(questionId: string): Promise<Entity.Answer[]>;
   getSuggestionsByQuestionId(questionId: string): Promise<Entity.Suggestion[]>;
   getSubmissionsByQuizId(quizId: string): Promise<Entity.Submission[]>;

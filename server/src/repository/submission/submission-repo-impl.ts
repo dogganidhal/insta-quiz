@@ -25,4 +25,14 @@ export class SubmissionRepositoryImpl implements ISubmissionRepository {
     return repository.find({ userId: userId });
   }
 
+  public async createSubmission(submission: Entity.Submission): Promise<Entity.Submission> {
+    let repository = this.connection.getRepository(Entity.Submission);
+    return repository.save(submission);
+  }
+
+  public async saveAnswers(answers: Entity.Answer[]): Promise<void> {
+    let repository = this.connection.getRepository(Entity.Answer);
+    await repository.insert(answers);
+  }
+
 }

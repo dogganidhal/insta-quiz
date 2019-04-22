@@ -75,4 +75,9 @@ export class QuizRepositoryImpl implements IQuizRepository {
     return await repository.findOne({ id: questionId });
   }
 
+  public async getSubmissionsById(id: string, relations?: string[]): Promise<Entity.Submission> {
+    let repository = this.connection.getRepository(Entity.Submission);
+    return await repository.findOne({ id }, { relations });
+  }
+
 }

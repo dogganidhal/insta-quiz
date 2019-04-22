@@ -1,8 +1,4 @@
-import { Question } from "./question";
-import { Suggestion } from "./suggestion";
-import { Submission } from "./submission";
 import { Entity } from "../../entity";
-
 
 export class Answer {
 

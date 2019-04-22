@@ -21,6 +21,8 @@ export type IAnswerTypeResolver = {
   submission(answer: Dto.Output.Answer): Promise<Dto.Output.Submission>;
   suggestion(answer: Dto.Output.Answer): Promise<Dto.Output.Suggestion>;
   question(answer: Dto.Output.Answer): Promise<Dto.Output.Question>;
+  userId(answer: Dto.Output.Answer): Promise<string>;
+  user(answer: Dto.Output.Answer): Promise<Dto.Output.User>;
 }
 
 export type IQuizResponseTypeResolver = {

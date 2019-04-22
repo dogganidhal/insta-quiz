@@ -81,6 +81,14 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
       question: async (answer: Dto.Output.Answer) => {
         let question = await this.quizRepository.getQuestionById(answer.questionId);
         return new Dto.Output.Question(question);
+      },
+      userId: async (answer: Dto.Output.Answer) => {
+        let submission = await this.quizRepository.getSubmissionsById(answer.submissionId);
+        return submission.userId;
+      },
+      user: async (answer: Dto.Output.Answer) => {
+        let submission = await this.quizRepository.getSubmissionsById(answer.submissionId, ["user"]);
+        return submission.user;
       }
     };
   }

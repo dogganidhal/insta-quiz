@@ -78,6 +78,8 @@ type Answer {
   suggestion: Suggestion!
   questionId: ID!
   question: Question!
+  userId: ID!
+  user: User!
 }
 
 type AuthCredentials {

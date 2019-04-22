@@ -1,4 +1,4 @@
-import { ISubmissionResolver, ISubmissionQueries, ISubmissionMutations, ISubmissionTypeResolver, IAnswerTypeResolver } from ".";
+import { ISubmissionResolver, ISubmissionQueries, ISubmissionMutations, ISubmissionTypeResolver, IAnswerTypeResolver, IQuizResponseTypeResolver } from ".";
 import { injectable, inject } from "inversify";
 import { Dto } from "../../../model/dto";
 import { UnauthenticatedException, SubmissionNotFoundException, UnauthorizedException } from "../../../exceptions";
@@ -63,11 +63,8 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
         let quiz = await this.quizRepository.getQuizById(submission.quizId);
         return new Dto.Output.Quiz(quiz);
       },
-      answers: async (submission: Dto.Output.Submission) => {
-        let answers = await this.submissionRepository.getAnswersBySubmissionId(submission.id);
-        return answers.map(answer => new Dto.Output.Answer(answer));
-      },
-      score: async submission => submission.score
+      score: async submission => await this.submissionManager.calculateScore(submission.id),
+      responses: async submission => await this.submissionManager.getQuizResponsesOfSubmission(submission.id),
     };
   };
 
@@ -80,8 +77,25 @@ export class SubmissionResolverImpl implements ISubmissionResolver {
       submission: async (answer: Dto.Output.Answer) => {
         let submission = await this.submissionRepository.getSubmissionById(answer.submissionId);
         return new Dto.Output.Submission(submission);
+      },
+      question: async (answer: Dto.Output.Answer) => {
+        let question = await this.quizRepository.getQuestionById(answer.questionId);
+        return new Dto.Output.Question(question);
       }
     };
+  }
+
+  public get QuizResponse(): IQuizResponseTypeResolver {
+    return {
+      answers: async (quizResponse: Dto.Output.QuizResponse) => {
+        let answers = await this.quizRepository.getAnswersByQuestionId(quizResponse.questionId);
+        return answers.map(answer => new Dto.Output.Answer(answer));
+      },
+      question: async (quizResponse: Dto.Output.QuizResponse) => {
+        let question = await this.quizRepository.getQuestionById(quizResponse.questionId);
+        return new Dto.Output.Question(question);
+      },
+    }
   }
 
 }

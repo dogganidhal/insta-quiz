@@ -52,7 +52,7 @@ export class QuizRepositoryImpl implements IQuizRepository {
 
   public async getAnswersByQuestionId(questionId: string): Promise<Entity.Answer[]> {
     let repository = this.connection.getRepository(Entity.Answer);
-    return await repository.find({ suggestion: {questionId: questionId} });
+    return await repository.find({ questionId: questionId });
   }
 
   public async getSuggestionsByQuestionId(questionId: string): Promise<Entity.Suggestion[]> {

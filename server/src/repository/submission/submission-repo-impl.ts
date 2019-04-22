@@ -35,4 +35,9 @@ export class SubmissionRepositoryImpl implements ISubmissionRepository {
     await repository.insert(answers);
   }
 
+  public async getAnswersByQuestionId(questionId: string): Promise<Entity.Answer[]> {
+    let repository = this.connection.getRepository(Entity.Answer);
+    return repository.find({ questionId: questionId });
+  }
+
 }

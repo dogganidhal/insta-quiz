@@ -53,13 +53,19 @@ type Score {
   totalPoints: Int!
 }
 
+type QuizResponse {
+  questionId: ID!
+  question: Question!
+  answers: [Answer!]!
+}
+
 type Submission {
   id: ID!
   userId: ID!
   user: User!
   quizId: ID!
   quiz: Quiz!
-  answers: [Answer]
+  responses: [QuizResponse]!
   score: Score!
 }
 
@@ -70,6 +76,8 @@ type Answer {
   submission: Submission!
   suggestionId: ID!
   suggestion: Suggestion!
+  questionId: ID!
+  question: Question!
 }
 
 type AuthCredentials {

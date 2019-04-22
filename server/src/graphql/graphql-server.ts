@@ -39,6 +39,7 @@ export class GraphQLServer {
         Question: this.quizResolver.Question,
         Answer: this.submissionResolver.Answer,
         Suggestion: this.quizResolver.Suggestion,
+        QuizResponse: this.submissionResolver.QuizResponse
       }
     );
   }

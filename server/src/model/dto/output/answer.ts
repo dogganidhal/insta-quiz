@@ -4,24 +4,13 @@ import { Submission } from "./submission";
 import { Entity } from "../../entity";
 
 
-/*
-type Answer {
-  id: ID!
-  questionId: ID!
-  question: Question!
-  suggestionId: ID!
-  suggestion: Suggestion!
-}
-*/
-
 export class Answer {
 
   public id: string;
   public content: string;
   public submissionId: string;
-  public submission: Submission;
   public suggestionId: string;
-  public suggestion: Suggestion;
+  public questionId: string;
 
   constructor()
   constructor(answer: Entity.Answer)
@@ -31,12 +20,7 @@ export class Answer {
       this.content = answer.content;
       this.submissionId = answer.submissionId;
       this.suggestionId = answer.suggestionId;
-      if (answer.submission) {
-        this.submission = new Submission(answer.submission);
-      }
-      if (answer.suggestion) {
-        this.suggestion = new Suggestion(answer.suggestion);
-      }
+      this.questionId = answer.questionId;
     }
   }
   

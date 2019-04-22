@@ -5,7 +5,7 @@
     "url": "postgres://root:root@localhost:5432/insta_quiz",
     "synchronize": true,
     "logger": "file",
-    "logging": false,
+    "logging": true,
     "entities": [
       "src/model/entity/**/*.ts"
     ],

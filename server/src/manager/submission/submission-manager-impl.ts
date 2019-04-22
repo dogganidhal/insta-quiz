@@ -7,6 +7,7 @@ import { IQuizRepository } from "../../repository/quiz";
 import { QuizAleadySubmittedException, QuizNotFoundException, UnansweredQuestionException, InvalidSingleChoiceAnswer, InconsistentAnswerException } from "../../exceptions";
 import { ISubmissionRepository } from "../../repository/submission";
 import { QuestionType } from "../../model/entity/question";
+import { response } from "express";
 
 
 @injectable()
@@ -46,41 +47,22 @@ export class SubmissionManagerImpl implements ISubmissionManager {
 
     await this.submissionRepository.saveAnswers(answers);
 
-    let dto = new Dto.Output.Submission(submission);
-    dto.score = await this.calculateScore(questions, answers);
+    let questionAnswersPeers: Map<Entity.Question, Entity.Answer[]> = new Map();
 
-    return dto;
+    for (let question of questions) {
+      if (question.type == QuestionType.INPUT) continue;
+      questionAnswersPeers.set(question, answers.filter(answer => answer.questionId === question.id));
+    }
+
+    return new Dto.Output.Submission(submission);
   
   }
 
-  private async createAnswers(answers: Dto.Input.InsertAnswerInput[]): Promise<Entity.Answer[]> {
+  public async calculateScore(submissionId: string): Promise<Dto.Output.Score> {
 
-    let answerEntities: Entity.Answer[] = [];
-    
-    await Promise.all(
-      answers.map(async answer => {
-
-        let question = await this.quizRepository.getQuestionById(answer.questionId);
-        let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
-        if (suggestion.questionId !== answer.questionId)
-          throw InconsistentAnswerException(answer.questionId);
-
-        answerEntities.push(new Entity.Answer({
-          question: question,
-          questionId: question.id,
-          suggestion: suggestion,
-          suggestionId: suggestion.id,
-          content: answer.content
-        }))
-        
-      })
-    );
-
-    return answerEntities;
-
-  }
-
-  private async calculateScore(questions: Entity.Question[], answers: Entity.Answer[]): Promise<Dto.Output.Score> {
+    let submission = await this.submissionRepository.getSubmissionById(submissionId);
+    let questions = await this.quizRepository.getQuestionsByQuizId(submission.quizId);
+    let answers = await this.submissionRepository.getAnswersBySubmissionId(submissionId);
 
     let points = 0, totalPoints = 0;
 
@@ -108,6 +90,48 @@ export class SubmissionManagerImpl implements ISubmissionManager {
       points: points,
       totalPoints: totalPoints
     });
+  }
+
+  public async getQuizResponsesOfSubmission(submissionId: string): Promise<Dto.Output.QuizResponse[]> {
+
+    let submission = await this.submissionRepository.getSubmissionById(submissionId);
+    let questions = await this.quizRepository.getQuestionsByQuizId(submission.quizId);
+
+    let responses: Dto.Output.QuizResponse[] = [];
+
+    for (let question of questions) {    
+      responses.push(new Dto.Output.QuizResponse(question.id));
+    }
+
+    return responses;
+
+  }
+
+  private async createAnswers(answers: Dto.Input.InsertAnswerInput[]): Promise<Entity.Answer[]> {
+
+    let answerEntities: Entity.Answer[] = [];
+
+    await Promise.all(
+      answers.map(async answer => {
+
+        let question = await this.quizRepository.getQuestionById(answer.questionId);
+        let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
+        if (suggestion.questionId !== answer.questionId)
+          throw InconsistentAnswerException(answer.questionId);
+
+        answerEntities.push(new Entity.Answer({
+          question: question,
+          questionId: question.id,
+          suggestion: suggestion,
+          suggestionId: suggestion.id,
+          content: answer.content
+        }))
+
+      })
+    );
+
+    return answerEntities;
+
   }
 
 }

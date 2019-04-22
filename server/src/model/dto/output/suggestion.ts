@@ -6,7 +6,6 @@ export class Suggestion {
 
   public id: string;
   public questionId: string;
-  public question: Question;
   public content?: string;
   public imageUrl?: string;
 
@@ -18,9 +17,6 @@ export class Suggestion {
       this.content = suggestion.content;
       this.imageUrl = suggestion.imageUrl;
       this.questionId = suggestion.questionId;
-      if (suggestion.question) {
-        this.question = new Question(suggestion.question);
-      }
     }
   }
 

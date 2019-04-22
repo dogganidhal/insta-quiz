@@ -53,6 +53,7 @@ export class GraphQLServer {
       schema: schema,
       introspection: true,
       tracing: true,
+      playground: true,
       context: ctx => this.authMiddleware.apply(ctx)
     });
     server.applyMiddleware({ app: app });

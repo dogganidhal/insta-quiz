@@ -52,6 +52,7 @@ export class GraphQLServer {
     let server = new ApolloServer({
       schema: schema,
       introspection: true,
+      tracing: true,
       context: ctx => this.authMiddleware.apply(ctx)
     });
     server.applyMiddleware({ app: app });

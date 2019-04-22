@@ -7,7 +7,6 @@ import { IQuizRepository } from "../../repository/quiz";
 import { QuizAleadySubmittedException, QuizNotFoundException, UnansweredQuestionException, InvalidSingleChoiceAnswer, InconsistentAnswerException } from "../../exceptions";
 import { ISubmissionRepository } from "../../repository/submission";
 import { QuestionType } from "../../model/entity/question";
-import { response } from "express";
 
 
 @injectable()

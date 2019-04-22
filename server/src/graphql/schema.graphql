@@ -21,7 +21,7 @@ type User {
 type Quiz {
   id: ID!
   title: String!
-  description: String!
+  description: String
   type: QuizType!
   authorId: ID!
   author: User!

@@ -24,6 +24,10 @@ export function InconsistentAnswerException(questionId: string): ApolloError {
   return new ApolloError(`Answer to the question with id '${questionId}' is inconsistent, check the suggestions you picked or the question type`, "INCONSISTENT_ANSWER");
 }
 
+export function QuizDeadlineReached(quizId: string): ApolloError {
+  return new ApolloError(`Quiz with id '${quizId}' has reached it's deadline`, "QUIZ_DEADLINE_REACHED");
+}
+
 export let UnauthenticatedException: ApolloError = new AuthenticationError('Missing or invalid authorization header');
 
 export let UnauthorizedException: ApolloError = new ApolloError("Access denied to resource", "FORBIDDEN");

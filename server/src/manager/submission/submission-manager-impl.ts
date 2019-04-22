@@ -4,7 +4,7 @@ import { Entity } from "../../model/entity";
 import { injectable, inject } from "inversify";
 import { Types } from "../../constants/types";
 import { IQuizRepository } from "../../repository/quiz";
-import { QuizAleadySubmittedException, QuizNotFoundException, UnansweredQuestionException, InvalidSingleChoiceAnswer, InconsistentAnswerException } from "../../exceptions";
+import { QuizAleadySubmittedException, QuizNotFoundException, UnansweredQuestionException, InvalidSingleChoiceAnswer, InconsistentAnswerException, QuizDeadlineReached } from "../../exceptions";
 import { ISubmissionRepository } from "../../repository/submission";
 import { QuestionType } from "../../model/entity/question";
 
@@ -24,6 +24,9 @@ export class SubmissionManagerImpl implements ISubmissionManager {
     let quiz = await this.quizRepository.getQuizById(submissionData.quizId);
     if (!quiz)
       throw QuizNotFoundException(submissionData.quizId);
+
+    if (quiz.deadline && quiz.deadline.getTime() - Date.now() < 0)
+      throw QuizDeadlineReached(quiz.id);
 
     let questions = await this.quizRepository.getQuestionsByQuizId(quiz.id);
     for (let question of questions) {

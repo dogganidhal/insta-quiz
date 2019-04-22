@@ -20,5 +20,26 @@
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
     }
+  },
+  {
+    "name": "staging",
+    "url": "postgres://tjmaqraxwzoegl:d4e33395c9f03dd7cc0623ba918a20f61601b452bb67bed1de7c0d7c3bf00623@ec2-79-125-2-142.eu-west-1.compute.amazonaws.com:5432/dbst3gtkq81ics",
+    "type": "postgres",
+    "synchronize": true,
+    "ssl": true,
+    "entities": [
+      "src/model/entity/**/*.ts"
+    ],
+    "migrations": [
+      "src/model/migration/**/*.ts"
+    ],
+    "subscribers": [
+      "src/model/subscriber/**/*.ts"
+    ],
+    "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
   }
 ]

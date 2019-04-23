@@ -5,14 +5,22 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { Container } from 'inversify';
 import { AppState } from '../../state/app-state';
-import NavigationBar from '../navigation/navigation-bar';
+import NavigationBar from '../navigation/NavigationBar';
+import Login from '../login/Login';
+import { CircularProgress, Theme, withStyles } from '@material-ui/core';
 
+let styles = (theme: Theme) => ({
+  progress: {
+    margin: theme.spacing.unit * 2
+  },
+});
 
-export interface IMainProps {
+interface IMainProps {
   isLoading: boolean;
   isLogged: boolean;
   // Actions
   loadApp(): void;
+  classes: any; 
 }
 
 class MainComponent extends Component<IMainProps> {
@@ -22,12 +30,20 @@ class MainComponent extends Component<IMainProps> {
   }
 
   public render() {
+    let { classes } = this.props;
     if (this.props.isLoading)
-      return <h3>Loading</h3>;
+      return <div style={{
+          display: "grid",
+          placeItems: "center",
+          height: "100vh"
+        }} 
+      > 
+        <CircularProgress className={classes.progress} />
+      </div>;
     if (this.props.isLogged)
       return <NavigationBar />
     else
-      return <h3>Logged out</h3>;
+      return <Login />;
   }
 }
 
@@ -47,4 +63,4 @@ function mapStateToProps(state: AppState, ownProperties: IMainProps): IMainProps
 }
 
 let Main = connect(mapStateToProps, mapDispatchToProps)(MainComponent);
-export default Main as any;
+export default withStyles(styles)(Main) as any;

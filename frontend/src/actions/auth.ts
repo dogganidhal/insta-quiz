@@ -25,6 +25,23 @@ export interface SetLoggedOutAction extends IAction {
   type: "SET_LOGGED_OUT";
 }
 
+export function login(token: string): ThunkAction<void, AuthState, Container, AuthAction> {
+  return async (dispatch, getState, container) => {
+    dispatch({ type: "SET_AUTH_LOADING", isLoading:true });
+    let authCredentials = await getAuthCredentials(container, token);
+    let userSession = container.get<IUserSession>(Types.IUserSession);
+    userSession.saveAuthCredentials(authCredentials);
+    let user = await getUser(container);
+    userSession.saveUser(user);
+    dispatch({ type: "SET_AUTH_LOADING", isLoading: false });
+    dispatch({
+      type: "SET_LOGGED_IN",
+      user,
+      authCredentials
+    })
+  }
+}
+
 export function logout(): ThunkAction<void, AuthState, Container, AuthAction> {
   return async (dispatch, getState, container) => {
     let userSession = container.get<IUserSession>(Types.IUserSession);
@@ -39,26 +56,12 @@ export function loadAuthState(): ThunkAction<void, AuthState, Container, AuthAct
     let userSession = container.get<IUserSession>(Types.IUserSession);
     let authCredentials = userSession.authCredentials;
     if (authCredentials) {
-      let client = container.get<ApolloClient<{}>>(Types.ApolloClient);
-      let response = await client.query<{ me: User }>({
-        query: gql`
-          {
-            me {
-              id
-              fullName
-              email
-            }
-          }
-        `});
-      if (response.errors) {
-        // TODO: handle errors
-        console.log(response.errors);
-      }
-      userSession.saveUser(response.data.me);
+      let user = await getUser(container);
+      userSession.saveUser(user);
       dispatch({ type: "SET_AUTH_LOADING", isLoading: false });
       dispatch({
         type: "SET_LOGGED_IN",
-        user: response.data.me,
+        user,
         authCredentials
       });
     } else {
@@ -66,4 +69,42 @@ export function loadAuthState(): ThunkAction<void, AuthState, Container, AuthAct
       dispatch({ type: "SET_LOGGED_OUT" });
     }
   }
+}
+
+async function getAuthCredentials(container: Container, token: string): Promise<AuthCredentials> {
+  let client = container.get<ApolloClient<{}>>(Types.ApolloClient);
+  let response = await client.query<{ login: AuthCredentials }>({
+    query: gql`
+      query loginWithGoogleToken($token: String!) {
+        login(token: $token) {
+          accessToken
+        }
+      }
+    `,
+    variables: { token: token }
+  });
+  if (response.errors) {
+    // TODO: handle errors
+    console.log(response.errors);
+  }
+  return response.data.login;
+}
+
+async function getUser(container: Container): Promise<User> {
+  let client = container.get<ApolloClient<{}>>(Types.ApolloClient);
+  let response = await client.query<{ me: User }>({
+    query: gql`
+      {
+        me {
+          id
+          fullName
+          email
+        }
+      }
+    `});
+  if (response.errors) {
+    // TODO: handle errors
+    console.log(response.errors);
+  }
+  return response.data.me;
 }

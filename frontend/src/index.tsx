@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "typeface-roboto";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

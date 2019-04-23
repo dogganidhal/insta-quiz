@@ -96,9 +96,9 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
               <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                 <MenuIcon />
               </IconButton>
-              <div className={classes.grow}>
+              <a className={classes.grow} href="/" >
                 <img src={logo} alt="logo" />
-              </div>
+              </a>
               <div>
                 <span>
                   <Typography noWrap={true} inline={true}>
@@ -142,11 +142,11 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{"Voulez-vous vraiment vous déconnecter?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
+              Voulez-vous vraiment vous déconnecter?
+              Vous pouvez vous reconnecter à tout moment.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

@@ -16,11 +16,15 @@ export class AuthMiddleware {
     if (!context.req.headers.authorization)
       return undefined;
     
-    let token = context.req.headers.authorization.replace("Bearer ", "");
-    let payload = await verify(token, process.env.JWT_SECRET) as Partial<User>;
-    let user = await this.userRepository.getUserByEmail(payload.email);
+    try {
+      let token = context.req.headers.authorization.replace("Bearer ", "");
+      let payload = await verify(token, process.env.JWT_SECRET) as Partial<User>;
+      let user = await this.userRepository.getUserByEmail(payload.email);
 
-    return { user };
+      return { user };
+    } catch {
+      return undefined;
+    }
     
   }
 

@@ -6,11 +6,23 @@
     "@types/jest": "24.0.11",
     "@types/node": "11.13.5",
     "@types/react-dom": "16.8.4",
+    "apollo-boost": "^0.3.1",
+    "apollo-link-context": "^1.0.17",
+    "dotenv": "^7.0.0",
+    "graphql": "^14.2.1",
+    "inversify": "^5.0.1",
+    "inversify-react": "^0.4.1",
+    "local-storage": "^2.0.0",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.5",
     "react-dom": "^16.8.6",
     "react-google-login": "^5.0.4",
+    "react-redux": "^7.0.2",
     "react-router": "^5.0.0",
     "react-scripts": "2.1.8",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
     "typescript": "3.4.4"
   },
   "scripts": {
@@ -29,6 +41,9 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/react": "^16.8.13"
+    "@types/dotenv": "^6.1.1",
+    "@types/react": "^16.8.13",
+    "@types/react-redux": "^7.0.8",
+    "redux-devtools": "^3.5.0"
   }
 }

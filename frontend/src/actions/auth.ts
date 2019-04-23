@@ -25,7 +25,15 @@ export interface SetLoggedOutAction extends IAction {
   type: "SET_LOGGED_OUT";
 }
 
-export function loadApp(): ThunkAction<void, AuthState, Container, AuthAction> {
+export function logout(): ThunkAction<void, AuthState, Container, AuthAction> {
+  return async (dispatch, getState, container) => {
+    let userSession = container.get<IUserSession>(Types.IUserSession);
+    userSession.clear();
+    dispatch({ type: "SET_LOGGED_OUT" });
+  }
+}
+
+export function loadAuthState(): ThunkAction<void, AuthState, Container, AuthAction> {
   return async (dispatch, getState, container) => {
     dispatch({ type: "SET_AUTH_LOADING", isLoading: true });
     let userSession = container.get<IUserSession>(Types.IUserSession);

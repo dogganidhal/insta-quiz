@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { AuthState } from '../../state/auth-state';
-import { loadApp, AuthAction } from '../../actions/auth';
+import { loadAuthState, AuthAction } from '../../actions/auth';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { Container } from 'inversify';
 import { AppState } from '../../state/app-state';
+import NavigationBar from '../navigation/navigation-bar';
 
 
 export interface IMainProps {
@@ -24,7 +25,7 @@ class MainComponent extends Component<IMainProps> {
     if (this.props.isLoading)
       return <h3>Loading</h3>;
     if (this.props.isLogged)
-      return <h3>Logged in</h3>;
+      return <NavigationBar />
     else
       return <h3>Logged out</h3>;
   }
@@ -33,7 +34,7 @@ class MainComponent extends Component<IMainProps> {
 function mapDispatchToProps(dispatch: ThunkDispatch<AuthState, Container, AuthAction>, ownProps: IMainProps): IMainProps {
   return {
     ...ownProps,
-    loadApp: () => dispatch(loadApp())
+    loadApp: () => dispatch(loadAuthState())
   };
 }
 

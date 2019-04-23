@@ -9,7 +9,6 @@ import { Provider } from "inversify-react";
 import { createStore, applyMiddleware } from "redux";
 import { appReducer } from "./reducers/app-reducer";
 import thunk from "redux-thunk";
-import { config } from "dotenv";
 
 async function main() {
 

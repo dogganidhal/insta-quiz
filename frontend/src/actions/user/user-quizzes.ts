@@ -20,7 +20,6 @@ interface SetUserQuizzesInAction extends IUserAction {
 }
 
 export function loadUserQuizzes(): ThunkAction<void, UserQuizzesState, Container, UserQuizzesAction> {
-  console.log("loadUserQuizzes");
   return async (dispatch, getState, container) => {
     dispatch({ type: "SET_USER_QUIZZES_LOADING", isLoading: true });
     let client = container.get<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient);
@@ -39,7 +38,6 @@ export function loadUserQuizzes(): ThunkAction<void, UserQuizzesState, Container
         }
       `
     });
-    console.log(response.data);
     if (response.errors) {
       // TODO: Handle errors
     }

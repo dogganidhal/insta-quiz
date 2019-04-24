@@ -15,6 +15,11 @@ let styles = (theme: Theme) => ({
   progress: {
     margin: theme.spacing.unit * 2
   },
+  progressContainer: {
+    display: "grid",
+    placeItems: "center",
+    height: "100vh"
+  }
 });
 
 interface IMainProps {
@@ -34,18 +39,14 @@ class MainComponent extends Component<IMainProps> {
   public render() {
     let { classes } = this.props;
     if (this.props.isLoading)
-      return <div style={{
-          display: "grid",
-          placeItems: "center",
-          height: "100vh"
-        }} 
-      >
+      return <div className={classes.progressContainer}>
         <CircularProgress className={classes.progress} />
       </div>;
     if (this.props.isLogged)
       return <Router>
         <Route exact path="/" component={Dashboard} />
         <Route path="/quiz/new" component={CreateQuizComponent} />
+        <Route path="/quiz/results" />
       </Router>;
     else
       return <Login />;

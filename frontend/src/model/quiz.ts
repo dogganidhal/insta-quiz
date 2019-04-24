@@ -16,7 +16,7 @@ export interface Quiz {
   readonly type: QuizType;
   readonly authorId: string;
   readonly author: User;
-  readonly deadline?: Date;
+  readonly deadline?: string;
   readonly questions: Question[];
   readonly submissions: Submission[];
 }

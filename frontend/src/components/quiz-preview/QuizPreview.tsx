@@ -2,12 +2,33 @@ import React from "react";
 import { Typography, Button, Theme, withStyles } from "@material-ui/core";
 
 let styles = (theme: Theme) => ({
+  container: {
+    height: 194,
+    width: 284,
+    padding: 16,
+    border: "1px solid #DADADA",
+    borderRadius: "8px",
+  },
   button: {
     margin: theme.spacing.unit,
+    right: 8,
+    bottom: 8
   },
-  input: {
-    display: 'none',
+  title: {
+    marginLeft: 16,
+    marginBottom: 16,
+    fontWeight: 500,
   },
+  label: {
+    fontSize: 14,
+    color: "#696969",
+    fontWeight: 500
+  },
+  value: {
+    fontSize: 14,
+    color: "#434343",
+    fontWeight: 600
+  }
 });
 
 export interface QuizPreviewProps {
@@ -23,29 +44,38 @@ class QuizPreviewComponent extends React.Component<QuizPreviewProps> {
   public render() {
     let { classes } = this.props;
     return (
-      <div
-        style={{
-          height: 194,
-          width: 284,
-          alignItems: 'center',
-          display: "flex",
-          justifyContent: "center",
-          border: "1px solid #DADADA",
-          boxSizing: "border-box",
-          borderRadius: "8px"
-        }}
-      >
-        <Typography variant="title">{this.props.title}</Typography>
+      <div className={classes.container} style={{
+        boxSizing: "border-box",
+        position: "relative"
+      }}>
+        <Typography variant="h5" className={classes.title}>
+          {this.props.title}
+        </Typography>
+        <div style={{ height: 8 }} />
         <div>
-          <Typography inline>Date limite:</Typography>
-          <Typography inline>{this.props.deadlineText}</Typography>
+          <Typography className={classes.label} inline>
+            Date limite&ensp;
+          </Typography>
+          <Typography className={classes.value} inline>{this.props.deadlineText}</Typography>
         </div>
+        <div style={{height: 8}} />
         <div>
-          <Typography inline>Nombre de participants:</Typography>
-          <Typography inline>{this.props.deadlineText}</Typography>
+          <Typography className={classes.label} inline>
+            Nombre de participants&ensp;
+          </Typography>
+          <Typography className={classes.value} inline>
+            {this.props.numberOfParticipants} participants
+          </Typography>
         </div>
-        <Button color="primary" className={classes.button} onClick={this.props.onSeeDetailsClicked}>
-          Primary
+        <Button 
+          color="primary" 
+          className={classes.button} 
+          style={{
+            position: "absolute",
+            bottom: 0, right: 0
+          }}
+          onClick={this.props.onSeeDetailsClicked}>
+          Voir les résultats
         </Button>
       </div>
     );

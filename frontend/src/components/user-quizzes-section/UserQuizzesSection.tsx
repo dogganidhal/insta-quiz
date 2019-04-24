@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { withStyles, Theme, Typography } from '@material-ui/core';
+import { withStyles, Theme, Typography, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { QuizPreviewModel } from '../../model/quiz-preview';
 import QuizPreview from '../quiz-preview/QuizPreview';
@@ -38,19 +38,25 @@ interface IUserQuizzesProps {
 
 class UserQuizzesComponent extends React.Component<IUserQuizzesProps> {
 
-  private get quizzes(): ReactNode {
+  public componentWillMount() {
+    this.props.loadUserQuizzes();
+  }
+
+  private quizzes(): ReactNode {
     return this.props.quizzes.map(quiz => {
-      <QuizPreview 
-        title={quiz.title} 
-        deadlineText={quiz.deadlineText} 
-        numberOfParticipants={quiz.numberOfParticipants}
-        onSeeDetailsClicked={() => this.onSeeQuizDetailsClicked(quiz.id)}
-      />
+      return <Grid key={quiz.id} item>
+        <QuizPreview
+          title={quiz.title}
+          deadlineText={quiz.deadlineText}
+          numberOfParticipants={quiz.numberOfParticipants}
+          onSeeDetailsClicked={() => this.onSeeQuizDetailsClicked(quiz.id)}
+        />
+      </Grid>;
     });
   }
 
   private onSeeQuizDetailsClicked(quizId: string) {
-    // TODO: Navigate to the quiz details view
+    window.location.href = `/quiz/results?id=${quizId}`;
   }
 
   public render() {
@@ -63,7 +69,11 @@ class UserQuizzesComponent extends React.Component<IUserQuizzesProps> {
         <Grid container spacing={16}>
           <Grid item xs={12}>
             <Grid container className={classes.demo} justify="center" spacing={40}>
-              {this.quizzes}
+              {
+                this.props.isLoading ?
+                  <CircularProgress /> :
+                  this.quizzes()
+              }
             </Grid>
           </Grid>
         </Grid>

@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { ThunkDispatch } from 'redux-thunk';
 import { AuthState } from '../../state/auth-state';
 import { Container } from 'inversify';
-import { AuthAction, loadAuthState, logout } from '../../actions/auth';
+import { AuthAction, logout } from '../../actions/auth';
 import { AppState } from '../../state/app-state';
 import { User } from '../../model/user';
 import { connect } from 'react-redux';

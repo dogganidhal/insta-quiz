@@ -5,9 +5,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { Container } from 'inversify';
 import { AppState } from '../../state/app-state';
-import NavigationBar from '../navigation/NavigationBar';
 import Login from '../login/Login';
 import { CircularProgress, Theme, withStyles } from '@material-ui/core';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Dashboard from '../dashboard/Dashboard';
+import CreateQuizComponent from '../create-quiz/CreateQuiz';
 
 let styles = (theme: Theme) => ({
   progress: {
@@ -37,11 +39,14 @@ class MainComponent extends Component<IMainProps> {
           placeItems: "center",
           height: "100vh"
         }} 
-      > 
+      >
         <CircularProgress className={classes.progress} />
       </div>;
     if (this.props.isLogged)
-      return <NavigationBar />
+      return <Router>
+        <Route exact path="/" component={Dashboard} />
+        <Route path="/quiz/new" component={CreateQuizComponent} />
+      </Router>;
     else
       return <Login />;
   }

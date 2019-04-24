@@ -1,8 +1,12 @@
-import { AuthState, initialAuthState } from "../state/auth-state";
+import { AuthState } from "../state/auth-state";
 import { AuthAction } from "../actions/auth";
 
+let initialState: AuthState = {
+  isLoading: false,
+  isLogged: false
+} 
 
-export function authReducer(state: AuthState = initialAuthState, action: AuthAction): AuthState {
+export function authReducer(state: AuthState = initialState, action: AuthAction): AuthState {
   switch (action.type) {
     case "SET_AUTH_LOADING":
       return {

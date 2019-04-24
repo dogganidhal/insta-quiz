@@ -8,8 +8,3 @@ export interface AuthState {
   readonly user?: User;
   readonly authCredentials?: AuthCredentials;
 }
-
-export let initialAuthState: AuthState = {
-  isLoading: false,
-  isLogged: false
-} 

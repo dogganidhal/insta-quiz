@@ -9,8 +9,13 @@ const theme = createMuiTheme({
   palette: {
     primary: { main: "#F44A4A" },
     secondary: { main: '#00D293' },
+    text: {
+      primary: "#434343"
+    }
   },
-  typography: { useNextVariants: true },
+  typography: { 
+    useNextVariants: true 
+  },
 });
 
 export interface IAppProps {

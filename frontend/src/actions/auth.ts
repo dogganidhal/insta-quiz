@@ -10,18 +10,18 @@ import { ApolloClient, gql } from "apollo-boost";
 
 export type AuthAction = SetAuthLoadingAction | SetLoggedInAction | SetLoggedOutAction;
 
-export interface SetAuthLoadingAction extends IAction {
+interface SetAuthLoadingAction extends IAction {
   type: "SET_AUTH_LOADING";
   isLoading: boolean;
 }
 
-export interface SetLoggedInAction extends IAction {
+interface SetLoggedInAction extends IAction {
   type: "SET_LOGGED_IN";
   user: User;
   authCredentials: AuthCredentials;
 }
 
-export interface SetLoggedOutAction extends IAction {
+interface SetLoggedOutAction extends IAction {
   type: "SET_LOGGED_OUT";
 }
 

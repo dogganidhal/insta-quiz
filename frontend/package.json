@@ -15,12 +15,14 @@
     "inversify": "^5.0.1",
     "inversify-react": "^0.4.1",
     "local-storage": "^2.0.0",
+    "querystring": "^0.2.0",
     "react": "^16.8.6",
     "react-apollo": "^2.5.5",
     "react-dom": "^16.8.6",
     "react-google-login": "^5.0.4",
     "react-redux": "^7.0.2",
     "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
@@ -47,6 +49,8 @@
     "@types/dotenv": "^6.1.1",
     "@types/react": "^16.8.13",
     "@types/react-redux": "^7.0.8",
+    "@types/react-router": "^4.4.5",
+    "@types/react-router-dom": "^4.3.2",
     "redux-devtools": "^3.5.0"
   }
 }

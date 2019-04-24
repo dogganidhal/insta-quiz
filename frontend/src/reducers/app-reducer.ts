@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import { AppState } from "../state/app-state";
-import { authReducer } from "./auth";
-import { uiReducer } from "./ui";
+import { authReducer } from "./auth-reducer";
+import { userReducer } from "./user-reducer";
 
 
 export let appReducer = combineReducers<AppState>({
   auth: authReducer,
-  ui: uiReducer
+  user: userReducer
 })

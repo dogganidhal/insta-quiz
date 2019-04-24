@@ -15,7 +15,7 @@ interface SetUserQuizzesLoadingAction extends IUserAction {
 }
 
 interface SetUserQuizzesInAction extends IUserAction {
-  type: "SET_USER_QUIZZES_IN";
+  type: "SET_USER_QUIZZES";
   quizzes: Quiz[];
 }
 
@@ -42,6 +42,6 @@ export function loadUserQuizzes(): ThunkAction<void, UserQuizzesState, Container
       // TODO: Handle errors
     }
     dispatch({ type: "SET_USER_QUIZZES_LOADING", isLoading: false });
-    dispatch({ type: "SET_USER_QUIZZES_IN", quizzes: response.data.quiz });
+    dispatch({ type: "SET_USER_QUIZZES", quizzes: response.data.quiz });
   };
 }

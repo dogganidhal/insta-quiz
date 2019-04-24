@@ -9,7 +9,7 @@ let initialState: UserQuizzesState = {
 
 export function userQuizzesReducer(state: UserQuizzesState = initialState, action: UserQuizzesAction): UserQuizzesState {
   switch (action.type) {
-    case "SET_USER_QUIZZES_IN":
+    case "SET_USER_QUIZZES":
       return {
         ...state,
         quizzes: action.quizzes

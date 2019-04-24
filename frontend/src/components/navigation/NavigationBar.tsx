@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 let styles = createStyles({
   root: {
     flexGrow: 1,
+    position: "fixed",
+    top: 0, left: 0, right: 0
   },
   grow: {
     flexGrow: 1,

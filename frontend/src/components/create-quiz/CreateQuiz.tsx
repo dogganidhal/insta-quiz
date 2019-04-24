@@ -3,14 +3,45 @@ import { RouteProps } from 'react-router';
 import { parse } from 'querystring';
 import { QuizTemplateId } from '../../model/quiz-template';
 import NavigationBar from '../navigation/NavigationBar';
-import { createStyles, withStyles } from '@material-ui/core';
+import { createStyles, Typography, withStyles, ButtonBase } from '@material-ui/core';
+import { Add, Send } from "@material-ui/icons";
+import CreateQuestion from './CreateQuestion';
 
 let styles = createStyles({
-  background: {
-
+  container: {
+    position: "fixed",
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: "#F2F2F2"
   },
-  form: {
-
+  body: {
+    marginTop: 64,
+    paddingTop: 36
+  },
+  bottomToolbar: {
+    position: "fixed",
+    right: 0,
+    left: 0,
+    bottom: 0,
+    background: "#FFFFFF",
+    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row-reverse"
+  },
+  shareButton: {
+    width: 279,
+    height: 64,
+    background: "#F44A4A",
+    borderRadius: 8,
+    alignSelf: "right",
+    margin: 16,
+  },
+  addQuestionButton: {
+    width: 279,
+    height: 64,
+    background: "#F44A4A",
+    borderRadius: 8,
+    alignSelf: "right",
+    marginTop: 16, marginBottom: 16
   }
 });
 
@@ -37,12 +68,21 @@ class CreateQuizComponent extends React.Component<CreateQuizProps, any> {
     
     let { classes } = this.props;
     return (
-      <div>
+      <div className={classes.container}>
         <NavigationBar />
-        <body className={classes.background}>
-          <div></div>
+        <body className={classes.body}>
+          <CreateQuestion />
         </body>
-        <h4>{this.templateId}</h4>
+        <div className={classes.bottomToolbar}>
+          <ButtonBase className={classes.shareButton}>
+            <Send style={{ color: "#FFFFFF" }} />
+            <Typography style={{ color: "#FFFFFF" }}>&ensp;&ensp;PARTAGER</Typography>
+          </ButtonBase>
+          <ButtonBase className={classes.addQuestionButton}>
+            <Add style={{ color: "#FFFFFF" }} />
+            <Typography style={{ color: "#FFFFFF" }}>&ensp;&ensp;NOUVELLE QUESTION</Typography>
+          </ButtonBase>
+        </div>
       </div>
     );
 

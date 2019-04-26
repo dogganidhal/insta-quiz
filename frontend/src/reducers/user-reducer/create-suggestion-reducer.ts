@@ -10,6 +10,7 @@ export function createSuggestionReducer(state: CreateSuggestionState, action: Cr
        ...state,
        content: action.content
      };
+    
   }
   console.log(action);
   return state;

@@ -14,13 +14,13 @@ export function createQuizReducer(state: CreateQuizState = initialState, action:
         ...state,
         createQuestion: action.createQuestion
       }
+    case "CREATE_QUESTION_SET_SUGGESTIONS":
     case "CREATE_QUESTION_ADD_SUGGESTION":
     case "CREATE_QUESTION_SET_CONTENT":
     case "CREATE_QUESTION_SET_POINTS":
     case "CREATE_QUESTION_SET_TYPE":
     case "CREATE_SUGGESTION_SET_CONTENT":
     case "CREATE_SUGGESTION_SET_IMAGE_URL":
-    case "CREATE_SUGGESTION_SET_IS_CORRECT":
       return {
         ...state,
         createQuestion: state.createQuestion ? createQuestionReducer(state.createQuestion!, action) : undefined

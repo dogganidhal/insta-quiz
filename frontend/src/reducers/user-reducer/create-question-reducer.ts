@@ -21,6 +21,11 @@ export function createQuestionReducer(state: CreateQuestionState, action: Create
         ...state,
         points: action.points
       };
+    case "CREATE_QUESTION_SET_SUGGESTIONS":
+      return {
+        ...state,
+        suggestions: action.suggestions
+      }
     case "CREATE_QUESTION_SET_TYPE":
       return {
         ...state,
@@ -28,7 +33,6 @@ export function createQuestionReducer(state: CreateQuestionState, action: Create
       };
     case "CREATE_SUGGESTION_SET_CONTENT":
     case "CREATE_SUGGESTION_SET_IMAGE_URL":
-    case "CREATE_SUGGESTION_SET_IS_CORRECT":
       return {
         ...state,
         createSuggestion: createSuggestionReducer(state.createSuggestion, action)

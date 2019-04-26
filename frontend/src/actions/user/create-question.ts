@@ -11,6 +11,7 @@ export type CreateQuestionAction = CreateQuestionAddSuggestionAction
   | CreateQuestionSetContentAction
   | CreateQuestionSetTypeAction
   | CreateQuestionSetPointsAction
+  | CreateSetSuggestionsAction
   | CreateSuggestionAction;
 
 export interface CreateQuestionAddSuggestionAction extends IUserAction {
@@ -33,10 +34,15 @@ export interface CreateQuestionSetPointsAction extends IUserAction {
   points: number;
 }
 
+export interface CreateSetSuggestionsAction extends IUserAction {
+  type: "CREATE_QUESTION_SET_SUGGESTIONS";
+  suggestions: InsertSuggestionInput[];
+}
+
 export function addSuggestion(): ThunkAction<void, AppState, Container, CreateQuestionAction> {
   return (dispatch, getState) => {
     let { createQuestion } = getState().user.createQuiz;
-    if (createQuestion) {
+    if (createQuestion && (createQuestion.createSuggestion.content || createQuestion.createSuggestion.imageUrl)) {
       dispatch({
         type: "CREATE_QUESTION_ADD_SUGGESTION",
         suggestion: {
@@ -51,6 +57,55 @@ export function addSuggestion(): ThunkAction<void, AppState, Container, CreateQu
       });
     }
   };
+}
+
+export function toggleSuggestionCorrect(index: number): ThunkAction<void, AppState, Container, CreateQuestionAction> {
+  return (dispatch, getState) => {
+    let createQuestion = getState().user.createQuiz.createQuestion;
+    if (createQuestion) {
+      let { suggestions } = createQuestion;
+      if (suggestions) {
+        let modifiedSuggestions: InsertSuggestionInput[] = createQuestion.type === QuestionType.SINGLE_CHOICE ? suggestions.map(suggestion => {
+          return {
+            ...suggestion,
+            isCorrect: false
+          };
+        }) : suggestions;
+        let modifiedSuggestion = suggestions[index];
+        modifiedSuggestions = [
+          ...(modifiedSuggestions.slice(0, index)),
+          {
+            ...modifiedSuggestion,
+            isCorrect: !modifiedSuggestion.isCorrect
+          },
+          ...(modifiedSuggestions.slice(index + 1))
+        ];
+        dispatch({
+          type: "CREATE_QUESTION_SET_SUGGESTIONS",
+          suggestions: modifiedSuggestions
+        });
+      }
+    }
+  }
+}
+
+export function deleteSuggestion(index: number): ThunkAction<void, AppState, Container, CreateQuestionAction> {
+  return (dispatch, getState) => {
+    let createQuestion = getState().user.createQuiz.createQuestion;
+    if (createQuestion) {
+      let { suggestions } = createQuestion;
+      if (suggestions) {
+        let modifiedSuggestions: InsertSuggestionInput[] = [
+          ...(suggestions.slice(0, index)),
+          ...(suggestions.slice(index + 1))
+        ];
+        dispatch({
+          type: "CREATE_QUESTION_SET_SUGGESTIONS",
+          suggestions: modifiedSuggestions
+        });
+      }
+    }
+  }
 }
 
 export function onQuestionContentInputChanged(input: string): ThunkAction<void, AppState, Container, CreateQuestionAction> {

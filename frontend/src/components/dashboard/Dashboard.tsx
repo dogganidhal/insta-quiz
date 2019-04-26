@@ -1,8 +1,8 @@
 import React from 'react';
 import NavigationBar from '../navigation/NavigationBar';
-import CreateQuizTemplates from '../create-quiz-templates/CreateQuizTemplates';
-import UserQuizzes from '../user-quizzes-section/UserQuizzesSection';
-import UserSubmissions from '../user-submissions-section/UserSubmissionsSection';
+import CreateQuizTemplates from './CreateQuizSection';
+import UserQuizzes from './UserQuizzesSection';
+import UserSubmissions from './UserSubmissionsSection';
 
 interface IDashboardProps {
 

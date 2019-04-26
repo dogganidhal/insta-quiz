@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { UserSubmissionsState } from "../../state/user-state";
+import { UserSubmissionsState } from "../../state/user-state/user-submissions-state";
 import { Container } from "inversify";
 import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
 import { Types } from "../../constants/types";

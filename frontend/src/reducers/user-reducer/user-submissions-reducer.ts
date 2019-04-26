@@ -1,4 +1,4 @@
-import { UserSubmissionsState } from "../../state/user-state";
+import { UserSubmissionsState } from "../../state/user-state/user-submissions-state";
 import { UserSubmissionsAction } from "../../actions/user/user-submissions";
 
 let initialState: UserSubmissionsState = {

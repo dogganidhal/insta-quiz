@@ -2,14 +2,14 @@ import React, { ReactNode } from 'react';
 import { withStyles, Theme, Typography, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { ThunkDispatch } from 'redux-thunk';
-import { UserSubmissionsState } from '../../state/user-state';
+import { UserSubmissionsState } from '../../state/user-state/user-submissions-state';
 import { Container } from 'inversify';
 import { AppState } from '../../state/app-state';
 import { connect } from 'react-redux';
 import { formatDeadline } from '../../utils/date-utils';
 import { UserSubmissionsAction, loadUserSubmissions } from '../../actions/user/user-submissions';
 import { SubmissionPreviewModel } from '../../model/submission-preview';
-import SubmissionPreview from '../submission-preview/SubmissionPreview';
+import SubmissionPreview from './SubmissionPreview';
 
 let styles = (theme: Theme) => ({
   root: {
@@ -106,5 +106,5 @@ function mapStateToProps(state: AppState, ownProperties: IUserSubmissionsProps):
   };
 }
 
-let UserSubmissions = withStyles(styles)(UserSubmissionsComponent);
-export default connect(mapStateToProps, mapDispatchToProps)(UserSubmissions) as any;
+let UserSubmissionsSection = withStyles(styles)(UserSubmissionsComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(UserSubmissionsSection) as any;

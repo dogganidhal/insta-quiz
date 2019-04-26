@@ -1,4 +1,4 @@
-import { UserQuizzesState } from "../../state/user-state";
+import { UserQuizzesState } from "../../state/user-state/user-quizzes-state";
 import { UserQuizzesAction } from "../../actions/user/user-quizzes";
 
 

@@ -9,7 +9,7 @@ import Login from '../login/Login';
 import { CircularProgress, Theme, withStyles } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from '../dashboard/Dashboard';
-import CreateQuizComponent from '../create-quiz/CreateQuiz';
+import CreateQuizComponent from '../quiz/CreateQuiz';
 
 let styles = (theme: Theme) => ({
   progress: {

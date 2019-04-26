@@ -9,7 +9,10 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3001",
-      "webRoot": "${workspaceRoot}/frontend/src"
+      "webRoot": "${workspaceRoot}/frontend/src",
+      "env": {
+        "PORT": 3001
+      }
     },
     {
       "name": "Server",

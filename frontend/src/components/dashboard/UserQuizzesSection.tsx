@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import { withStyles, Theme, Typography, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { QuizPreviewModel } from '../../model/quiz-preview';
-import QuizPreview from '../quiz-preview/QuizPreview';
+import QuizPreview from './QuizPreview';
 import { ThunkDispatch } from 'redux-thunk';
-import { UserQuizzesState } from '../../state/user-state';
+import { UserQuizzesState } from '../../state/user-state/user-quizzes-state';
 import { Container } from 'inversify';
 import { AppState } from '../../state/app-state';
 import { UserQuizzesAction, loadUserQuizzes } from '../../actions/user/user-quizzes';
@@ -104,5 +104,5 @@ function mapStateToProps(state: AppState, ownProperties: IUserQuizzesProps): IUs
   };
 }
 
-let UserQuizzes = withStyles(styles)(UserQuizzesComponent);
-export default connect(mapStateToProps, mapDispatchToProps)(UserQuizzes) as any;
+let UserQuizzesSection = withStyles(styles)(UserQuizzesComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(UserQuizzesSection) as any;

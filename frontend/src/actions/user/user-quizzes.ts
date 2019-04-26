@@ -1,10 +1,10 @@
 import { Quiz } from "../../model/quiz";
 import { ThunkAction } from "redux-thunk";
-import { UserQuizzesState } from "../../state/user-state";
 import { Container } from "inversify";
 import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
 import { Types } from "../../constants/types";
 import { IUserAction } from ".";
+import { UserQuizzesState } from "../../state/user-state/user-quizzes-state";
 
 
 export type UserQuizzesAction = SetUserQuizzesLoadingAction | SetUserQuizzesInAction;

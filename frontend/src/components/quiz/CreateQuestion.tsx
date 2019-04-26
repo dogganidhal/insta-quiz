@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { withStyles, createStyles, FormControl, InputLabel, Input, TextField, createMuiTheme, MuiThemeProvider, InputAdornment, IconButton, List, ListItem, Typography, Theme } from '@material-ui/core';
-import { Send, Close, Check, Cancel, Remove } from '@material-ui/icons';
+import { withStyles, createStyles, FormControl, InputLabel, Input, createMuiTheme, MuiThemeProvider, InputAdornment, IconButton, Typography, Theme, Button } from '@material-ui/core';
+import { Send, Close, Check } from '@material-ui/icons';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'inversify';
-import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType } from '../../actions/user/create-question';
+import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints } from '../../actions/user/create-question';
 import { AppState } from '../../state/app-state';
 import { connect } from 'react-redux';
 import { InsertSuggestionInput } from '../../model/insert-suggestion-input';
 import { onSuggestionContentInputChanged } from '../../actions/user/create-suggestion';
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import UserQuizzesSection from '../dashboard/UserQuizzesSection';
 import { QuestionType, questionTypeToString, questionTypeFromrString as questionTypeFromString } from '../../model/question';
 
 
@@ -23,6 +22,9 @@ let styles = (theme: Theme) => createStyles({
   },
   textField: {
     flex: 1,
+    margin: 16
+  },
+  pointsTextField: {
     margin: 16
   },
   suggestion: {
@@ -111,6 +113,7 @@ interface ICreateQuestionProps {
   suggestionContent?: string;
   suggestions: InsertSuggestionInput[];
   questionType: QuestionType;
+  points: number;
   // Actions
   addSuggestion(): void;
   onQuestionContentInputChanged(questionContent: string): void;
@@ -118,6 +121,7 @@ interface ICreateQuestionProps {
   toggleSuggestionCorrect(index: number): void;
   deleteSuggestionCorrect(index: number): void;
   setQuestionType(questionType: QuestionType): void;
+  setQuestionPoints(points: number): void;
 }
 
 class CreateQuestionComponent extends Component<ICreateQuestionProps> {
@@ -177,31 +181,42 @@ class CreateQuestionComponent extends Component<ICreateQuestionProps> {
                 } />
             </FormControl>
           }
-        </MuiThemeProvider>
-        {
-          // TODO: Handle image suggestions
-          this.props.questionType !== QuestionType.INPUT &&
-          this.props.suggestions
-            .map((suggestion, index) => {
-              return <div key={index} className={suggestion.isCorrect ? classes.suggestionCorrect : classes.suggestion}>
-                <div className={classes.suggestionBody}>
-                  <Typography inline className={classes.suggestionContent}>{suggestion.content}</Typography>
-                  <div>
-                    <IconButton
-                      onClick={() => this.props.toggleSuggestionCorrect(index)}
-                      className={classes.isCorrectIconButton}>
-                      <Check color={!suggestion.isCorrect ? "secondary" : "default"} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => this.props.deleteSuggestionCorrect(index)}
-                      className={classes.isCorrectIconButton}>
-                      <Close />
-                    </IconButton>
+          {
+            // TODO: Handle image suggestions
+            this.props.questionType !== QuestionType.INPUT && this.props.suggestions &&
+            this.props.suggestions
+              .map((suggestion, index) => {
+                return <div key={index} className={suggestion.isCorrect ? classes.suggestionCorrect : classes.suggestion}>
+                  <div className={classes.suggestionBody}>
+                    <Typography inline className={classes.suggestionContent}>{suggestion.content}</Typography>
+                    <div>
+                      <IconButton
+                        onClick={() => this.props.toggleSuggestionCorrect(index)}
+                        className={classes.isCorrectIconButton}>
+                        <Check color={!suggestion.isCorrect ? "secondary" : "default"} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => this.props.deleteSuggestionCorrect(index)}
+                        className={classes.isCorrectIconButton}>
+                        <Close />
+                      </IconButton>
+                    </div>
                   </div>
                 </div>
-              </div>
-            })
-        }
+              })
+          }
+          {
+            this.props.questionType !== QuestionType.INPUT &&
+            <FormControl className={classes.pointsTextField}>
+              <InputLabel htmlFor="points-input">Points</InputLabel>
+              <Input
+                id="points-input"
+                type="number"
+                onChange={(event) => this.props.setQuestionPoints(event.target.value as unknown as number)}
+                value={this.props.points} />
+            </FormControl>
+          }
+        </MuiThemeProvider>
         
       </div>
     );
@@ -212,11 +227,12 @@ function mapDispatchToProps(dispatch: ThunkDispatch<AppState, Container, CreateQ
   return {
     ...ownProps,
     addSuggestion: () => dispatch(addSuggestion()),
-    onQuestionContentInputChanged: (input) => dispatch(onQuestionContentInputChanged(input)),
-    onSuggestionContentInputChanged: (input) => dispatch(onSuggestionContentInputChanged(input)),
-    toggleSuggestionCorrect: (index) => dispatch(toggleSuggestionCorrect(index)),
-    deleteSuggestionCorrect: (index) => dispatch(deleteSuggestion(index)),
-    setQuestionType: (type) => dispatch(setQuestionType(type))
+    onQuestionContentInputChanged: input => dispatch(onQuestionContentInputChanged(input)),
+    onSuggestionContentInputChanged: input => dispatch(onSuggestionContentInputChanged(input)),
+    toggleSuggestionCorrect: index => dispatch(toggleSuggestionCorrect(index)),
+    deleteSuggestionCorrect: index => dispatch(deleteSuggestion(index)),
+    setQuestionType: type => dispatch(setQuestionType(type)),
+    setQuestionPoints: points => dispatch(setQuestionPoints(points))
   };
 }
 
@@ -227,7 +243,8 @@ function mapStateToProps(state: AppState, ownProperties: ICreateQuestionProps): 
       ...ownProperties,
       questionType: createQuestion.type,
       suggestions: createQuestion.suggestions || [],
-      suggestionContent: createQuestion.createSuggestion.content
+      suggestionContent: createQuestion.createSuggestion.content,
+      points: createQuestion.points || 1
     };
   }
   return ownProperties;

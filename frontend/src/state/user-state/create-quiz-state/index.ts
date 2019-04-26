@@ -1,11 +1,11 @@
-import { Question } from "../../../model/question";
 import { CreateQuestionState } from "./create-question-state";
+import { InsertQuestionInput } from "../../../model/insert-question-input";
 
 
 export interface CreateQuizState {
   title?: string;
   description?: string;
   deadline?: string;
-  questions: Question[];
+  questions: InsertQuestionInput[];
   createQuestion?: CreateQuestionState;
 }

@@ -14,6 +14,11 @@ export function createQuizReducer(state: CreateQuizState = initialState, action:
         ...state,
         createQuestion: action.createQuestion
       }
+    case "CREATE_QUIZ_SET_QUESTIONS":
+      return {
+        ...state,
+        questions: action.questions
+      }
     case "CREATE_QUESTION_SET_SUGGESTIONS":
     case "CREATE_QUESTION_ADD_SUGGESTION":
     case "CREATE_QUESTION_SET_CONTENT":

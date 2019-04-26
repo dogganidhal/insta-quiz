@@ -1,13 +1,13 @@
 import React from 'react';
 import { RouteProps } from 'react-router';
 import NavigationBar from '../navigation/NavigationBar';
-import { createStyles, Typography, withStyles, ButtonBase, MuiThemeProvider, TextField, createMuiTheme, List, ListItem, Dialog, DialogTitle, DialogContentText, DialogContent } from '@material-ui/core';
+import { createStyles, Typography, withStyles, ButtonBase, MuiThemeProvider, TextField, createMuiTheme, List, ListItem, Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, Button } from '@material-ui/core';
 import { Add, Send } from "@material-ui/icons";
 import { Question as QuestionModel } from '../../model/question';
 import Question from './Question';
 import { Location } from "history";
 import { Container } from 'inversify';
-import { CreateQuizAction, setTempalteUriLocation, addQuestion, abortQuestion } from '../../actions/user/create-quiz';
+import { CreateQuizAction, setTempalteUriLocation, openQuestionDialog, abortQuestion, addQuestion } from '../../actions/user/create-quiz';
 import { CreateQuizState } from '../../state/user-state/create-quiz-state';
 import { AppState } from '../../state/app-state';
 import { ThunkDispatch } from 'redux-thunk';
@@ -87,6 +87,7 @@ export interface ICreateQuizProps extends RouteProps {
   // Actions
   setTempalteUriLocation(location?: Location): void;
   closeCreateQuestionDialog(): void;
+  openQuestionDialog(): void;
   addQuestion(): void;
   submit(): void;
 }
@@ -138,6 +139,13 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
               <DialogTitle id="create-question-dialog-title">Ajouter une question</DialogTitle>
               <DialogContent>
                 <CreateQuestion />
+                <DialogActions>
+                  <Button 
+                    color="primary"
+                    onClick={this.props.addQuestion}>
+                    AJOUTER UNE QUESTION
+                  </Button>
+                </DialogActions>
               </DialogContent>
             </Dialog>
           </div>
@@ -151,7 +159,7 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
           </ButtonBase>
           <ButtonBase 
             className={classes.addQuestionButton}
-            onClick={this.props.addQuestion}>
+            onClick={this.props.openQuestionDialog}>
             <Add style={{ color: "#FFFFFF" }} />
             <Typography style={{ color: "#FFFFFF" }}>&ensp;&ensp;NOUVELLE QUESTION</Typography>
           </ButtonBase>
@@ -162,19 +170,21 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
   }
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<CreateQuizState, Container, CreateQuizAction>, ownProps: ICreateQuizProps): ICreateQuizProps {
+function mapDispatchToProps(dispatch: ThunkDispatch<AppState, Container, CreateQuizAction>, ownProps: ICreateQuizProps): ICreateQuizProps {
   return {
     ...ownProps,
     setTempalteUriLocation: (location: Location) => dispatch(setTempalteUriLocation(location)),
-    addQuestion: () => dispatch(addQuestion()),
-    closeCreateQuestionDialog: () => dispatch(abortQuestion())
+    openQuestionDialog: () => dispatch(openQuestionDialog()),
+    closeCreateQuestionDialog: () => dispatch(abortQuestion()),
+    addQuestion: () => dispatch(addQuestion())
   };
 }
 
 function mapStateToProps(state: AppState, ownProperties: ICreateQuizProps): ICreateQuizProps {
   return {
     ...ownProperties,
-    isCreateQuestionDialogOpen: state.user.createQuiz.createQuestion !== undefined
+    isCreateQuestionDialogOpen: state.user.createQuiz.createQuestion !== undefined,
+    questions: state.user.createQuiz.questions
   };
 }
 

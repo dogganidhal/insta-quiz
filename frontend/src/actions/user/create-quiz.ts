@@ -10,6 +10,10 @@ import { CreateQuestionAction } from "./create-question";
 import { CreateQuestionState } from "../../state/user-state/create-quiz-state/create-question-state";
 import { InsertQuestionInput } from "../../model/insert-question-input";
 import { AppState } from "../../state/app-state";
+import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
+import { Types } from "../../constants/types";
+import { Quiz } from "../../model/quiz";
+import { InsertQuizInput } from "../../model/insert-quiz-input";
 
 
 export type CreateQuizAction = CreateQuizSubmitQuestionAction
@@ -19,7 +23,12 @@ export type CreateQuizAction = CreateQuizSubmitQuestionAction
   | CreateQuizSubmitAction
   | CreateQuizOpenQuestionDialogAction
   | CreateQuizSetQuestionsAction
+  | CreateQuizSuccessAction
   | CreateQuestionAction;
+
+interface CreateQuizSuccessAction extends IUserAction {
+  type: "CREATE_QUIZ_SUCCESS"
+}
 
 interface CreateQuizSubmitQuestionAction extends IUserAction {
   type: "CREATE_QUIZ_SUBMIT_QUESTION";
@@ -48,11 +57,29 @@ interface CreateQuizSetDescriptionAction extends IUserAction {
 
 interface CreateQuizSetDeadlineAction extends IUserAction {
   type: "CREATE_QUIZ_SET_DEADLINE";
-  deadline: Date;
+  deadline: string;
 }
 
 interface CreateQuizSubmitAction extends IUserAction {
   type: "CREATE_QUIZ_SUBMIT";
+}
+
+export function onQuizTitleInputChanged(input: string): ThunkAction<void, AppState, Container, CreateQuizAction> {
+  return dispatch => {
+    dispatch({
+      type: "CREATE_QUIZ_SET_TITLE",
+      title: input
+    });
+  }
+}
+
+export function onQuizDescriptionInputChanged(input: string): ThunkAction<void, AppState, Container, CreateQuizAction> {
+  return dispatch => {
+    dispatch({
+      type: "CREATE_QUIZ_SET_DESCRIPTION",
+      description: input
+    });
+  }
 }
 
 export function openQuestionDialog(): ThunkAction<void, AppState, Container, CreateQuizAction> {
@@ -108,4 +135,45 @@ export function setTempalteUriLocation(location: Location): ThunkAction<void, Ap
       templateId = QuizTemplateId.EMPTY;
     
   };
+}
+
+
+export function submit(): ThunkAction<void, AppState, Container, CreateQuizAction> {
+  return async (dispatch, getState, container) => {
+    let client = container.get<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient);
+    let { title, description, deadline, questions } = getState().user.createQuiz;
+    console.log({ title, description, deadline, questions });
+    if (title && questions.length > 0) { 
+      let quizData: InsertQuizInput = {
+        title: title,
+        questions: questions,
+        description: description,
+        deadline: deadline ? new Date(deadline) : undefined
+      };
+      let response = await client.mutate < { createQuiz: Quiz }, { quizData: InsertQuizInput }>({
+        mutation: gql`
+          mutation createQuiz($quizData: InsertQuizInput!) {
+            createQuiz(quizData: $quizData) {
+              id
+              questions {
+                id
+                content
+                type
+                suggestions {
+                  id
+                  content
+                  imageUrl
+                }
+              }
+            }
+          }
+        `,
+        variables: { quizData }
+      });
+      if (response.errors) {
+        // TODO: Handle errors
+      }
+      dispatch({ type: "CREATE_QUIZ_SUCCESS" });
+    }
+  }
 }

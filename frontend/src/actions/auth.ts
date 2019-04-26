@@ -6,7 +6,7 @@ import { AuthCredentials } from "../model/auth-credentials";
 import { Container } from "inversify";
 import { IUserSession } from "../session/user";
 import { Types } from "../constants/types";
-import { ApolloClient, gql } from "apollo-boost";
+import { ApolloClient, gql, NormalizedCacheObject } from "apollo-boost";
 
 export type AuthAction = SetAuthLoadingAction | SetLoggedInAction | SetLoggedOutAction;
 
@@ -72,7 +72,7 @@ export function loadAuthState(): ThunkAction<void, AuthState, Container, AuthAct
 }
 
 async function getAuthCredentials(container: Container, token: string): Promise<AuthCredentials> {
-  let client = container.get<ApolloClient<{}>>(Types.ApolloClient);
+  let client = container.get<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient);
   let response = await client.query<{ login: AuthCredentials }>({
     query: gql`
       query loginWithGoogleToken($token: String!) {
@@ -91,7 +91,7 @@ async function getAuthCredentials(container: Container, token: string): Promise<
 }
 
 async function getUser(container: Container): Promise<User> {
-  let client = container.get<ApolloClient<{}>>(Types.ApolloClient);
+  let client = container.get<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient);
   let response = await client.query<{ me: User }>({
     query: gql`
       {

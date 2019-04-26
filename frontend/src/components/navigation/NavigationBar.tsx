@@ -17,7 +17,9 @@ let styles = createStyles({
   root: {
     flexGrow: 1,
     position: "fixed",
-    top: 0, left: 0, right: 0
+    top: 0, left: 0, right: 0,
+    boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
+    zIndex: 10000
   },
   grow: {
     flexGrow: 1,
@@ -29,6 +31,9 @@ let styles = createStyles({
   },
   userNameText: {
     margin: 4
+  },
+  avatar: {
+    background: "#F44A4A"
   }
 });
 
@@ -116,7 +121,7 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
                   onClick={this.openUserDropDown.bind(this)}
                   color="inherit"
                 >
-                  <Avatar color="#F44A4A">{ this.props.user.fullName.substring(0, 1) }</Avatar>
+                  <Avatar className={classes.avatar}>{ this.props.user.fullName.substring(0, 1) }</Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"

@@ -8,4 +8,5 @@ export interface CreateQuizState {
   deadline?: string;
   questions: InsertQuestionInput[];
   createQuestion?: CreateQuestionState;
+  success: boolean;
 }

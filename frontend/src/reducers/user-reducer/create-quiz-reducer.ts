@@ -4,7 +4,8 @@ import { createQuestionReducer } from "./create-question-reducer";
 
 
 let initialState: CreateQuizState = {
-  questions: []
+  questions: [],
+  success: false
 };
 
 export function createQuizReducer(state: CreateQuizState = initialState, action: CreateQuizAction): CreateQuizState {
@@ -19,6 +20,26 @@ export function createQuizReducer(state: CreateQuizState = initialState, action:
         ...state,
         questions: action.questions
       }
+    case "CREATE_QUIZ_SUCCESS":
+      return {
+        ...state,
+        success: true
+      };
+    case "CREATE_QUIZ_SET_TITLE": 
+      return {
+        ...state,
+        title: action.title
+      };
+    case "CREATE_QUIZ_SET_DESCRIPTION":
+      return {
+        ...state,
+        description: action.description
+      };
+    case "CREATE_QUIZ_SET_DEADLINE":
+      return {
+        ...state,
+        deadline: action.deadline
+      };
     case "CREATE_QUESTION_SET_SUGGESTIONS":
     case "CREATE_QUESTION_ADD_SUGGESTION":
     case "CREATE_QUESTION_SET_CONTENT":

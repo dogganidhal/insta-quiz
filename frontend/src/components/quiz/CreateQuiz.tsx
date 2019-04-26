@@ -1,13 +1,13 @@
 import React from 'react';
 import { RouteProps } from 'react-router';
 import NavigationBar from '../navigation/NavigationBar';
-import { createStyles, Typography, withStyles, ButtonBase, MuiThemeProvider, TextField, createMuiTheme, List, ListItem, Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, Button } from '@material-ui/core';
+import { createStyles, Typography, withStyles, ButtonBase, MuiThemeProvider, TextField, createMuiTheme, List, ListItem, Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import { Add, Send } from "@material-ui/icons";
 import { Question as QuestionModel } from '../../model/question';
 import Question from './Question';
 import { Location } from "history";
 import { Container } from 'inversify';
-import { CreateQuizAction, setTempalteUriLocation, openQuestionDialog, abortQuestion, addQuestion } from '../../actions/user/create-quiz';
+import { CreateQuizAction, setTempalteUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged } from '../../actions/user/create-quiz';
 import { CreateQuizState } from '../../state/user-state/create-quiz-state';
 import { AppState } from '../../state/app-state';
 import { ThunkDispatch } from 'redux-thunk';
@@ -17,24 +17,23 @@ import CreateQuestion from './CreateQuestion';
 
 let styles = createStyles({
   container: {
-    position: "fixed",
-    top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: "#F2F2F2"
+    positions: "relative",
+    width: "100%", height: "100%",
   },
   body: {
-    marginTop: 64,
-    paddingTop: 36
+    position: "absolute", top: 64, bottom: 80,
+    paddingTop: 36, paddingBottom: 36,
+    overflowY: "auto", width: "100%",
+    backgroundColor: "#F2F2F2"
   },
   bottomToolbar: {
-    position: "fixed",
-    right: 0,
-    left: 0,
-    bottom: 0,
-    height: 72,
+    position: "absolute", bottom: 0,
+    width: "100%",
     background: "#FFFFFF",
     alignItems: 'center',
     display: "flex",
-    flexDirection: "row-reverse"
+    flexDirection: "row-reverse",
+    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)"
   },
   shareButton: {
     width: 279,
@@ -84,7 +83,12 @@ export interface ICreateQuizProps extends RouteProps {
   classes: any;
   questions: InsertQuestionInput[];
   isCreateQuestionDialogOpen: boolean;
+  success: boolean;
+  title?: string;
+  description?: string;
   // Actions
+  onQuizTitleInputChanged(input: string): void;
+  onQuizDescriptionInputChanged(input: string): void;
   setTempalteUriLocation(location?: Location): void;
   closeCreateQuestionDialog(): void;
   openQuestionDialog(): void;
@@ -105,6 +109,10 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
   }
 
   public render() {
+
+    if (this.props.success) {
+      window.location.href = "/";
+    }
     
     let { classes } = this.props;
     return (
@@ -113,8 +121,22 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
         <div className={classes.body}>
           <div className={classes.quizInfoContainer}>
             <MuiThemeProvider theme={textFieldTheme}>
-              <TextField multiline label="Titre du quiz" className={classes.textField} />
-              <TextField multiline label="Description du quiz" className={classes.textField} />
+              <FormControl className={classes.textField}>
+                <InputLabel htmlFor="title-input">Titre du quiz</InputLabel>
+                <Input
+                  multiline
+                  id="title-input"
+                  onChange={(event) => this.props.onQuizTitleInputChanged(event.target.value)}
+                  value={this.props.title} />
+              </FormControl>
+              <FormControl className={classes.textField}>
+                <InputLabel htmlFor="description-input">Titre du quiz</InputLabel>
+                <Input
+                  multiline
+                  id="description-input"
+                  onChange={(event) => this.props.onQuizDescriptionInputChanged(event.target.value)}
+                  value={this.props.description} />
+              </FormControl>
             </MuiThemeProvider>
             {
               this.props.questions && this.props.questions.length > 0 &&
@@ -176,7 +198,10 @@ function mapDispatchToProps(dispatch: ThunkDispatch<AppState, Container, CreateQ
     setTempalteUriLocation: (location: Location) => dispatch(setTempalteUriLocation(location)),
     openQuestionDialog: () => dispatch(openQuestionDialog()),
     closeCreateQuestionDialog: () => dispatch(abortQuestion()),
-    addQuestion: () => dispatch(addQuestion())
+    addQuestion: () => dispatch(addQuestion()),
+    submit: () => dispatch(submit()),
+    onQuizDescriptionInputChanged: input => dispatch(onQuizDescriptionInputChanged(input)),
+    onQuizTitleInputChanged: input => dispatch(onQuizTitleInputChanged(input))
   };
 }
 
@@ -184,7 +209,10 @@ function mapStateToProps(state: AppState, ownProperties: ICreateQuizProps): ICre
   return {
     ...ownProperties,
     isCreateQuestionDialogOpen: state.user.createQuiz.createQuestion !== undefined,
-    questions: state.user.createQuiz.questions
+    questions: state.user.createQuiz.questions,
+    success: state.user.createQuiz.success,
+    title: state.user.createQuiz.title,
+    description: state.user.createQuiz.description
   };
 }
 

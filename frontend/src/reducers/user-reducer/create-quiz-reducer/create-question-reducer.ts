@@ -1,6 +1,6 @@
-import { CreateQuestionState } from "../../state/user-state/create-quiz-state/create-question-state";
-import { CreateQuestionAction } from "../../actions/user/create-question";
 import { createSuggestionReducer } from "./create-suggestion-reducer";
+import { CreateQuestionState } from "../../../state/user-state/create-quiz-state/create-question-state";
+import { CreateQuestionAction } from "../../../actions/user/create-quiz/create-question";
 
 
 export function createQuestionReducer(state: CreateQuestionState, action: CreateQuestionAction): CreateQuestionState {

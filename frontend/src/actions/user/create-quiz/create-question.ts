@@ -1,12 +1,11 @@
-import { IUserAction } from ".";
-import { InsertSuggestionInput } from "../../model/insert-suggestion-input";
-import { QuestionType } from "../../model/question";
 import { ThunkAction } from "redux-thunk";
-import { CreateQuestionState } from "../../state/user-state/create-quiz-state/create-question-state";
-import { Container } from "inversify";
 import { CreateSuggestionAction } from "./create-suggestion";
-import { AppState } from "../../state/app-state";
 import firebase from "firebase";
+import { IUserAction } from "..";
+import { InsertSuggestionInput } from "../../../model/insert-suggestion-input";
+import { QuestionType } from "../../../model/question";
+import { AppState } from "../../../state/app-state";
+import { Container } from "inversify";
 
 export type CreateQuestionAction = CreateQuestionAddSuggestionAction 
   | CreateQuestionSetContentAction

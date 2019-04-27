@@ -5,11 +5,13 @@ import { quizResponseReducer } from "./quiz-response-reducer";
 import { quizResultReducer } from "./quiz-result-reducer";
 import { userSubmissionsReducer } from "./user-submissions-reducer";
 import { createQuizReducer } from "./create-quiz-reducer";
+import { answerQuizReducer } from "./answer-quiz-reducer";
 
 
 export let userReducer = combineReducers<UserState>({
   userQuizzes: userQuizzesReducer,
   userSubmissions: userSubmissionsReducer,
+  answerQuiz: answerQuizReducer,
   createQuiz: createQuizReducer,
   quizResponse: quizResponseReducer,
   quizResult: quizResultReducer

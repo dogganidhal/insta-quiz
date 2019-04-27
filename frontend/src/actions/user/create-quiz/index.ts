@@ -1,20 +1,20 @@
-import { IUserAction } from ".";
-import { Question, QuestionType } from "../../model/question";
+import { Question, QuestionType } from "../../../model/question";
 import { ThunkAction } from "redux-thunk";
-import { CreateQuizState } from "../../state/user-state/create-quiz-state";
+import { CreateQuizState } from "../../../state/user-state/create-quiz-state";
 import { Container } from "inversify";
 import { parse } from "querystring";
-import { QuizTemplateId } from "../../model/quiz-template";
+import { QuizTemplateId } from "../../../model/quiz-template";
 import { Location } from "history";
 import { CreateQuestionAction } from "./create-question";
-import { CreateQuestionState } from "../../state/user-state/create-quiz-state/create-question-state";
-import { InsertQuestionInput } from "../../model/insert-question-input";
-import { AppState } from "../../state/app-state";
+import { CreateQuestionState } from "../../../state/user-state/create-quiz-state/create-question-state";
+import { InsertQuestionInput } from "../../../model/insert-question-input";
+import { AppState } from "../../../state/app-state";
 import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
-import { Types } from "../../constants/types";
-import { Quiz } from "../../model/quiz";
-import { InsertQuizInput } from "../../model/insert-quiz-input";
+import { Types } from "../../../constants/types";
+import { Quiz } from "../../../model/quiz";
+import { InsertQuizInput } from "../../../model/insert-quiz-input";
 import { Moment } from "moment";
+import { IUserAction } from "..";
 
 
 export type CreateQuizAction = CreateQuizSubmitQuestionAction

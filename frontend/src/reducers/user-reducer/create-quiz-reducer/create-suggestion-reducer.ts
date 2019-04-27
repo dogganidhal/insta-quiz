@@ -1,5 +1,5 @@
-import { CreateSuggestionAction } from "../../actions/user/create-suggestion";
-import { CreateSuggestionState } from "../../state/user-state/create-quiz-state/create-suggestion-state";
+import { CreateSuggestionState } from "../../../state/user-state/create-quiz-state/create-suggestion-state";
+import { CreateSuggestionAction } from "../../../actions/user/create-quiz/create-suggestion";
 
 
 

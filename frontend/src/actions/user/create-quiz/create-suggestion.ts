@@ -1,7 +1,7 @@
-import { IUserAction } from ".";
 import { ThunkAction } from "redux-thunk";
 import { Container } from "inversify";
-import { AppState } from "../../state/app-state";
+import { IUserAction } from "..";
+import { AppState } from "../../../state/app-state";
 
 export type CreateSuggestionAction = CreateSuggestionSetContentAction 
   | CreateSuggestionSetImageUrlAction;

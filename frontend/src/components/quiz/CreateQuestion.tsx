@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { withStyles, createStyles, FormControl, InputLabel, Input, createMuiTheme, MuiThemeProvider, InputAdornment, IconButton, Typography, Theme, Button } from '@material-ui/core';
-import { Send, Close, Check, PictureAsPdf, PictureInPicture, AddAPhoto, AddPhotoAlternate } from '@material-ui/icons';
+import { Send, AddPhotoAlternate } from '@material-ui/icons';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'inversify';
-import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints, uploadImageSuggestion } from '../../actions/user/create-question';
+import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints, uploadImageSuggestion } from '../../actions/user/answer-quiz/create-question';
 import { AppState } from '../../state/app-state';
 import { connect } from 'react-redux';
 import { InsertSuggestionInput } from '../../model/insert-suggestion-input';
-import { onSuggestionContentInputChanged } from '../../actions/user/create-suggestion';
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { QuestionType, questionTypeToString, questionTypeFromrString as questionTypeFromString } from '../../model/question';
 import Suggestion from './Suggestion';
+import { onSuggestionContentInputChanged } from '../../actions/user/create-quiz/create-suggestion';
 let { FilePicker } = require("react-file-picker");
 
 

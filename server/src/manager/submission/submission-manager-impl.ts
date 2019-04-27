@@ -29,12 +29,13 @@ export class SubmissionManagerImpl implements ISubmissionManager {
       throw QuizDeadlineReached(quiz.id);
 
     let questions = await this.quizRepository.getQuestionsByQuizId(quiz.id);
-    for (let question of questions) {
-      if (!submissionData.answers.map(answer => answer.questionId).includes(question.id))
-        throw UnansweredQuestionException(question.id);
+    
+    for (let question of submissionData.questions) {
+      if (question.answers.length < 0)
+        throw UnansweredQuestionException(question.questionId);
     }
     
-    let answers = await this. createAnswers(submissionData.answers);
+    let answers = await this.createAnswers(submissionData.questions);
     let submission = await this.submissionRepository.createSubmission(new Entity.Submission({
       userId: user.id,
       user: user,
@@ -109,25 +110,43 @@ export class SubmissionManagerImpl implements ISubmissionManager {
 
   }
 
-  private async createAnswers(answers: Dto.Input.InsertAnswerInput[]): Promise<Entity.Answer[]> {
+  private async createAnswers(questions: Dto.Input.InsertQuestionSubmissionInput[]): Promise<Entity.Answer[]> {
 
     let answerEntities: Entity.Answer[] = [];
 
     await Promise.all(
-      answers.map(async answer => {
+      questions.map(async question => {
 
-        let question = await this.quizRepository.getQuestionById(answer.questionId);
-        let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
-        if (suggestion.questionId !== answer.questionId)
-          throw InconsistentAnswerException(answer.questionId);
+        if (question.answers.length == 0)
+          throw UnansweredQuestionException(question.questionId);
 
-        answerEntities.push(new Entity.Answer({
-          question: question,
-          questionId: question.id,
-          suggestion: suggestion,
-          suggestionId: suggestion.id,
-          content: answer.content
-        }))
+        let questionEntity = await this.quizRepository.getQuestionById(question.questionId);
+        if (questionEntity.type === QuestionType.INPUT && question.answers.filter(answer => answer.content).length === 0)
+          throw UnansweredQuestionException(question.questionId);
+        else if (question.answers.filter(answer => answer.suggestionId).length === 0)
+          throw UnansweredQuestionException(question.questionId);
+        
+        await Promise.all(
+          question.answers.map(async answer => {
+            
+            let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
+            
+            if (suggestion.questionId !== question.questionId)
+              throw InconsistentAnswerException(question.questionId);
+
+            
+            
+            let answerEntity = new Entity.Answer({
+              question: questionEntity,
+              questionId: questionEntity.id,
+              suggestion: suggestion,
+              suggestionId: suggestion.id,
+              content: answer.content
+            })
+            answerEntities.push(answerEntity);
+
+          })
+        )
 
       })
     );

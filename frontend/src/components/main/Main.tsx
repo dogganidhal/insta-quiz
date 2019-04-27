@@ -10,6 +10,7 @@ import { CircularProgress, Theme, withStyles } from '@material-ui/core';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from '../dashboard/Dashboard';
 import CreateQuizComponent from '../quiz/CreateQuiz';
+import AnswerQuiz from '../quiz/AnswerQuiz';
 
 let styles = (theme: Theme) => ({
   progress: {
@@ -47,6 +48,7 @@ class MainComponent extends Component<IMainProps> {
         <Route exact path="/" component={Dashboard} />
         <Route path="/quiz/new" component={CreateQuizComponent} />
         <Route path="/quiz/results" />
+        <Route path="/quiz/answer" component={AnswerQuiz} />
       </Router>;
     else
       return <Login />;

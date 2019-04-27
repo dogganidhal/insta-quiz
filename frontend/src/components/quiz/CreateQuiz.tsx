@@ -7,7 +7,7 @@ import { Question as QuestionModel } from '../../model/question';
 import Question from './Question';
 import { Location } from "history";
 import { Container } from 'inversify';
-import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/create-quiz';
+import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/answer-quiz/create-quiz';
 import { AppState } from '../../state/app-state';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';

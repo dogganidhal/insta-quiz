@@ -93,6 +93,12 @@ export class QuizResolverImpl implements IQuizResolver {
       question: async (suggestion: Dto.Output.Suggestion) => {
         let question = await this.quizRepository.getQuestionById(suggestion.questionId);
         return new Dto.Output.Question(question);
+      },
+      isCorrect: async (suggestion: Dto.Output.Suggestion, args, context) => {
+        if (!context.user)
+          throw UnauthenticatedException;
+        
+        return await this.quizManager.getSuggestionIsCorrect(context.user, suggestion.id);
       }
     };
   }

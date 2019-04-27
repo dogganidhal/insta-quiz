@@ -10,6 +10,10 @@ import { Provider } from "inversify-react";
 import { createStore, applyMiddleware } from "redux";
 import { appReducer } from "./reducers/app-reducer";
 import thunk from "redux-thunk";
+import "moment/locale/fr";
+import moment from "moment";
+
+moment.locale("fr");
 
 async function main() {
 

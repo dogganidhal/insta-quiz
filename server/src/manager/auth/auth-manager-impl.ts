@@ -24,9 +24,8 @@ export class AuthManagerImpl implements IAuthManager {
         audience: process.env.GOOGLE_OAUTH2_CLIENTID,
       });
       let payload = ticket.getPayload();
-      if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) { // TODO: Replace with proper validation logic
+      if (payload.hd !== Constants.SUPPORTED_GSUITE_DOMAIN) // TODO: Replace with proper validation logic
         throw UnauthorizedException;
-      }
       let user = await this.userRepository.getOrCreateUser(payload.email, payload.name);
       let accessToken = await this.signJwt(user);
       return new Dto.Output.AuthCredentials(accessToken);

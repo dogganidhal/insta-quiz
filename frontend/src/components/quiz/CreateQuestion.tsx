@@ -25,7 +25,8 @@ let styles = (theme: Theme) => createStyles({
     margin: 16
   },
   pointsTextField: {
-    margin: 16
+    margin: 16,
+    flexWrap: "wrap"
   },
   suggestion: {
     marginBottom: 16,
@@ -108,6 +109,18 @@ let textFieldTheme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
+let buttonsTheme = createMuiTheme({
+  palette: {
+    type: "dark",
+    primary: {
+      main: "#F44A4A",
+      dark: "#F44A4A",
+      light: "#F44A4A"
+    }
+  },
+  typography: { useNextVariants: true },
+});
+
 interface ICreateQuestionProps {
   classes: any;
   suggestionContent?: string;
@@ -130,28 +143,30 @@ class CreateQuestionComponent extends Component<ICreateQuestionProps> {
     let { classes } = this.props;
     return (
       <div className={classes.container}>
-        <ToggleButtonGroup
-          exclusive
-          onChange={(event, value: string) => this.props.setQuestionType(questionTypeFromString(value))}
-          classes={{
-            root: classes.questionTypeToggleGroup 
-          }} 
-          value={this.props.questionType}>
-          {
-            [QuestionType.SINGLE_CHOICE, QuestionType.MULTI_CHOICE, QuestionType.INPUT].map(type => {
-              return <ToggleButton
-                value={type.toString()}
-                selected={type == this.props.questionType}
-                classes={{
-                  root: classes.questionTypeToggle,
-                  label: classes.questionTypeLabel,
-                  selected: classes.questionTypeToggleSelected
-                }}>
-                {questionTypeToString(type)}
-              </ToggleButton>;  
-            })
-          }
-        </ToggleButtonGroup>
+        <MuiThemeProvider theme={buttonsTheme}>
+          <ToggleButtonGroup
+            exclusive
+            onChange={(_, value: string) => this.props.setQuestionType(questionTypeFromString(value))}
+            classes={{
+              root: classes.questionTypeToggleGroup
+            }}
+            value={this.props.questionType}>
+            {
+              [QuestionType.SINGLE_CHOICE, QuestionType.MULTI_CHOICE, QuestionType.INPUT].map(type => {
+                return <ToggleButton
+                  value={type.toString()}
+                  selected={type == this.props.questionType}
+                  classes={{
+                    root: classes.questionTypeToggle,
+                    label: classes.questionTypeLabel,
+                    selected: classes.questionTypeToggleSelected
+                  }}>
+                  {questionTypeToString(type)}
+                </ToggleButton>;
+              })
+            }
+          </ToggleButtonGroup>
+        </MuiThemeProvider>
         <MuiThemeProvider theme={textFieldTheme}>
           <FormControl className={classes.textField}>
             <InputLabel htmlFor="question-input">Intitulé de la question</InputLabel>
@@ -166,9 +181,12 @@ class CreateQuestionComponent extends Component<ICreateQuestionProps> {
             <FormControl className={classes.textField}>
               <InputLabel htmlFor="suggestion-input">Intitulé de la suggestion</InputLabel>
               <Input
-                multiline
                 id="suggestion-input"
                 onChange={(event) => this.props.onSuggestionContentInputChanged(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter")
+                    this.props.addSuggestion();
+                }}
                 value={this.props.suggestionContent}
                 endAdornment={
                   <InputAdornment position="end">

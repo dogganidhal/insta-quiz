@@ -14,9 +14,11 @@ class DashboardComponent extends React.Component<IDashboardProps, any> {
     return (
       <div>
         <NavigationBar />
-        <CreateQuizTemplates />
-        <UserQuizzes />
-        <UserSubmissions />
+        <div style={{marginTop: 64}}>
+          <CreateQuizTemplates />
+          <UserQuizzes />
+          <UserSubmissions />
+        </div>
       </div>
     );
   }

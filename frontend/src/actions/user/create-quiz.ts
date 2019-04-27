@@ -14,6 +14,7 @@ import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
 import { Types } from "../../constants/types";
 import { Quiz } from "../../model/quiz";
 import { InsertQuizInput } from "../../model/insert-quiz-input";
+import { Moment } from "moment";
 
 
 export type CreateQuizAction = CreateQuizSubmitQuestionAction
@@ -127,16 +128,40 @@ export function abortQuestion(): ThunkAction<void, AppState, Container, CreateQu
   };
 }
 
-export function setTempalteUriLocation(location: Location): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function setTemplateUriLocation(location: Location): ThunkAction<void, AppState, Container, CreateQuizAction> {
   return dispatch => {
     let queryString = location.search.replace("?", "");
-    let templateId: QuizTemplateId = parse(queryString).templateId as QuizTemplateId;
+    let templateId: QuizTemplateId = parse(queryString).template as QuizTemplateId;
     if (templateId !== QuizTemplateId.EMPTY && templateId !== QuizTemplateId.MCQ && templateId !== QuizTemplateId.FORM) 
       templateId = QuizTemplateId.EMPTY;
-    
+    let questionType: QuestionType;
+    switch (templateId) {
+      case QuizTemplateId.FORM:
+        questionType = QuestionType.INPUT;
+        break;
+      case QuizTemplateId.MCQ:
+        questionType = QuestionType.SINGLE_CHOICE;
+        break;
+      default: 
+        return;
+    }
+    dispatch({
+      type: "CREATE_QUIZ_ADD_QUESTION",
+      createQuestion: {
+        type: questionType,
+        createSuggestion: {}
+      } 
+    });
   };
 }
 
+export function setDeadlineText(deadline: Moment): ThunkAction<void, AppState, Container, CreateQuizAction> {
+  return dispatch => {
+    if (deadline != null) {
+      dispatch({ type: "CREATE_QUIZ_SET_DEADLINE", deadline: deadline.toISOString() });
+    }
+  }
+}
 
 export function submit(): ThunkAction<void, AppState, Container, CreateQuizAction> {
   return async (dispatch, getState, container) => {
@@ -150,8 +175,9 @@ export function submit(): ThunkAction<void, AppState, Container, CreateQuizActio
         description: description,
         deadline: deadline ? new Date(deadline) : undefined
       };
-      let response = await client.mutate < { createQuiz: Quiz }, { quizData: InsertQuizInput }>({
-        mutation: gql`
+      try {
+        let response = await client.mutate<{ createQuiz: Quiz }, { quizData: InsertQuizInput }>({
+          mutation: gql`
           mutation createQuiz($quizData: InsertQuizInput!) {
             createQuiz(quizData: $quizData) {
               id
@@ -168,12 +194,15 @@ export function submit(): ThunkAction<void, AppState, Container, CreateQuizActio
             }
           }
         `,
-        variables: { quizData }
-      });
-      if (response.errors) {
-        // TODO: Handle errors
+          variables: { quizData }
+        });
+        if (response.errors) {
+          // TODO: Handle errors
+        }
+        dispatch({ type: "CREATE_QUIZ_SUCCESS" });
+      } catch (exception) {
+        console.log({exception});
       }
-      dispatch({ type: "CREATE_QUIZ_SUCCESS" });
     }
   }
 }

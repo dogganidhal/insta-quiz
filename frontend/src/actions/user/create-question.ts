@@ -115,8 +115,21 @@ export function onQuestionContentInputChanged(input: string): ThunkAction<void, 
 }
 
 export function setQuestionType(type: QuestionType): ThunkAction<void, AppState, Container, CreateQuestionAction> {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: "CREATE_QUESTION_SET_TYPE", questionType: type });
+    let { createQuestion } = getState().user.createQuiz;
+    if (createQuestion) {
+      let { suggestions } = createQuestion;
+      if (suggestions) {
+        let modifiedSuggestions = suggestions.map(suggestion => {
+          return {
+            ...suggestion,
+            isCorrect: false
+          };
+        });
+        dispatch({ type: "CREATE_QUESTION_SET_SUGGESTIONS", suggestions: modifiedSuggestions });
+      }
+    }
   };
 }
 

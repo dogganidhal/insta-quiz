@@ -24,6 +24,7 @@ export type IQuestionTypeResolver = {
 
 export type ISuggestionTypeResolver = {
   question(suggestion: Dto.Output.Suggestion): Promise<Dto.Output.Question>;
+  isCorrect(suggestion: Dto.Output.Suggestion, ...args): Promise<boolean>;
 }
 
 export type IQuizResolver = IQueryResolver<IQuizQueries> & IMutatationResolver<IQuizMutations> & {

@@ -16,8 +16,6 @@ import { connect } from 'react-redux';
 let styles = createStyles({
   root: {
     flexGrow: 1,
-    position: "fixed",
-    top: 0, left: 0, right: 0,
     boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
     zIndex: 10000
   },
@@ -79,6 +77,7 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
   }
 
   private openUserDropDown(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+    event.stopPropagation();
     this.setState({ anchorEl: event.currentTarget });
   }
 
@@ -98,7 +97,7 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
     return (
       <div className={classes.root}>
         <MuiThemeProvider theme={appBarTheme} >
-          <AppBar position="static" color="primary" elevation={0}>
+          <AppBar position="fixed" color="primary" elevation={0} style={{ boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)" }}>
             <Toolbar>
               <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                 <MenuIcon />
@@ -111,7 +110,7 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
                   <Typography noWrap={true} inline={true}>
                     Bonjour
                 </Typography>
-                  <Typography inline={true} color="secondary" className={classes.userNameText}>
+                  <Typography variant="button" inline={true} color="secondary" className={classes.userNameText}>
                     { this.props.user.fullName }
                 </Typography>
                 </span>
@@ -121,21 +120,17 @@ class NavigationBarComponent extends React.Component<INavigationBarProps, INavig
                   onClick={this.openUserDropDown.bind(this)}
                   color="inherit"
                 >
-                  <Avatar className={classes.avatar}>{ this.props.user.fullName.substring(0, 1) }</Avatar>
+                  <Avatar
+                    aria-owns={anchorEl ? "menu-appbar" : undefined}
+                    className={classes.avatar}>
+                    { this.props.user.fullName.substring(0, 1) }
+                  </Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
+                  anchorEl={anchorEl}
                   open={open}
-                  onClose={this.closeUserDropDown.bind(this)}
-                >
+                  onClose={this.closeUserDropDown.bind(this)}>
                   <MenuItem onClick={this.openLogoutAlertDialog.bind(this)}>Se déconnecter</MenuItem>
                 </Menu>
               </div>

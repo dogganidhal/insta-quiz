@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Question as QuestionModel, QuestionType } from '../../model/question';
-import { Typography, Radio, MuiThemeProvider, createMuiTheme, List, ListItem, Divider } from '@material-ui/core';
+import { Typography, Radio, MuiThemeProvider, createMuiTheme, List, ListItem, Divider, Checkbox } from '@material-ui/core';
 import { DeepPartial } from 'redux';
 
 let theme = createMuiTheme({
@@ -32,7 +32,12 @@ class QuestionComponent extends React.Component<QuestionProps> {
                   return <ListItem dense alignItems="flex-start" >
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                       <MuiThemeProvider theme={theme}>
-                        <Radio checked color="primary" />
+                        {
+                          this.props.question.type === QuestionType.SINGLE_CHOICE && <Radio checked color="primary" />                        
+                        }
+                        {
+                          this.props.question.type === QuestionType.MULTI_CHOICE && <Checkbox checked color="primary" />
+                        }
                       </MuiThemeProvider>
                       <Typography>{suggestion!.content}</Typography>
                     </div>

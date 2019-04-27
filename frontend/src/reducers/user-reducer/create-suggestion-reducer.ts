@@ -8,10 +8,13 @@ export function createSuggestionReducer(state: CreateSuggestionState, action: Cr
     case "CREATE_SUGGESTION_SET_CONTENT":
      return {
        ...state,
-       content: action.content
+       content: action.content || ""
      };
-    
+    case "CREATE_SUGGESTION_SET_IMAGE_URL":
+     return {
+       ...state,
+       imageUrl: action.imageUrl
+     };
   }
-  console.log(action);
   return state;
 }

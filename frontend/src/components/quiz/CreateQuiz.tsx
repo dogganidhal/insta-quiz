@@ -7,13 +7,16 @@ import { Question as QuestionModel } from '../../model/question';
 import Question from './Question';
 import { Location } from "history";
 import { Container } from 'inversify';
-import { CreateQuizAction, setTempalteUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged } from '../../actions/user/create-quiz';
-import { CreateQuizState } from '../../state/user-state/create-quiz-state';
+import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/create-quiz';
 import { AppState } from '../../state/app-state';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { InsertQuestionInput } from '../../model/insert-question-input';
 import CreateQuestion from './CreateQuestion';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import MomentUtils from '@date-io/moment';
+import { Moment } from 'moment';
+
 
 let styles = createStyles({
   container: {
@@ -79,6 +82,18 @@ let textFieldTheme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
+let buttonsTheme = createMuiTheme({
+  palette: {
+    type: "dark",
+    primary: {
+      main: "#F44A4A",
+      dark: "#F44A4A",
+      light: "#F44A4A"
+    }
+  },
+  typography: { useNextVariants: true },
+});
+
 export interface ICreateQuizProps extends RouteProps {
   classes: any;
   questions: InsertQuestionInput[];
@@ -86,6 +101,7 @@ export interface ICreateQuizProps extends RouteProps {
   success: boolean;
   title?: string;
   description?: string;
+  deadline?: string;
   // Actions
   onQuizTitleInputChanged(input: string): void;
   onQuizDescriptionInputChanged(input: string): void;
@@ -93,12 +109,11 @@ export interface ICreateQuizProps extends RouteProps {
   closeCreateQuestionDialog(): void;
   openQuestionDialog(): void;
   addQuestion(): void;
+  setDeadlineText(moment: Moment): void;
   submit(): void;
 }
 
 class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
-  
-  private templateId?: string;
 
   private onEditQuestionButtonClicked(question: InsertQuestionInput) {
 
@@ -130,13 +145,25 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
                   value={this.props.title} />
               </FormControl>
               <FormControl className={classes.textField}>
-                <InputLabel htmlFor="description-input">Titre du quiz</InputLabel>
+                <InputLabel htmlFor="description-input">Description du quiz</InputLabel>
                 <Input
                   multiline
                   id="description-input"
                   onChange={(event) => this.props.onQuizDescriptionInputChanged(event.target.value)}
                   value={this.props.description} />
               </FormControl>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                  clearable
+                  clearLabel="RÉINITIALISER"
+                  margin="normal"
+                  label="Date limite"
+                  value={this.props.deadline || null}
+                  format="DD/MM/YYYY"
+                  className={classes.textField}
+                  onChange={this.props.setDeadlineText}
+                />
+              </MuiPickersUtilsProvider>
             </MuiThemeProvider>
             {
               this.props.questions && this.props.questions.length > 0 &&
@@ -157,34 +184,36 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
               onClose={this.props.closeCreateQuestionDialog}
               aria-labelledby="create-question-dialog-title"
               maxWidth="md"
+              scroll="paper"
               fullWidth={true}>
-              <DialogTitle id="create-question-dialog-title">Ajouter une question</DialogTitle>
               <DialogContent>
                 <CreateQuestion />
-                <DialogActions>
-                  <Button 
+              </DialogContent>
+              <DialogActions>
+                  <Button size="large"
                     color="primary"
                     onClick={this.props.addQuestion}>
                     AJOUTER UNE QUESTION
                   </Button>
                 </DialogActions>
-              </DialogContent>
             </Dialog>
           </div>
         </div>
         <div className={classes.bottomToolbar}>
-          <ButtonBase 
-            className={classes.shareButton}
-            onClick={this.props.submit}>
-            <Send style={{ color: "#FFFFFF" }}/>
-            <Typography style={{ color: "#FFFFFF" }}>&ensp;&ensp;PARTAGER</Typography>
-          </ButtonBase>
-          <ButtonBase 
-            className={classes.addQuestionButton}
-            onClick={this.props.openQuestionDialog}>
-            <Add style={{ color: "#FFFFFF" }} />
-            <Typography style={{ color: "#FFFFFF" }}>&ensp;&ensp;NOUVELLE QUESTION</Typography>
-          </ButtonBase>
+          <MuiThemeProvider theme={buttonsTheme}>
+            <Button variant="contained" size="large" color="primary"
+              className={classes.shareButton}
+              onClick={this.props.submit}>
+              <Send />
+              <Typography variant="button">&ensp;&ensp;PARTAGER</Typography>
+            </Button>
+            <Button variant="contained" size="large" color="primary"
+              className={classes.addQuestionButton}
+              onClick={this.props.openQuestionDialog}>
+              <Add/>
+              <Typography variant="button">&ensp;&ensp;NOUVELLE QUESTION</Typography>
+            </Button>
+          </MuiThemeProvider>
         </div>
       </div>
     );
@@ -195,24 +224,27 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
 function mapDispatchToProps(dispatch: ThunkDispatch<AppState, Container, CreateQuizAction>, ownProps: ICreateQuizProps): ICreateQuizProps {
   return {
     ...ownProps,
-    setTempalteUriLocation: (location: Location) => dispatch(setTempalteUriLocation(location)),
+    setTempalteUriLocation: (location: Location) => dispatch(setTemplateUriLocation(location)),
     openQuestionDialog: () => dispatch(openQuestionDialog()),
     closeCreateQuestionDialog: () => dispatch(abortQuestion()),
     addQuestion: () => dispatch(addQuestion()),
     submit: () => dispatch(submit()),
     onQuizDescriptionInputChanged: input => dispatch(onQuizDescriptionInputChanged(input)),
-    onQuizTitleInputChanged: input => dispatch(onQuizTitleInputChanged(input))
+    onQuizTitleInputChanged: input => dispatch(onQuizTitleInputChanged(input)),
+    setDeadlineText: moment => dispatch(setDeadlineText(moment))
   };
 }
 
 function mapStateToProps(state: AppState, ownProperties: ICreateQuizProps): ICreateQuizProps {
+  let { createQuestion, questions, success, title, description, deadline } = state.user.createQuiz;
   return {
     ...ownProperties,
-    isCreateQuestionDialogOpen: state.user.createQuiz.createQuestion !== undefined,
-    questions: state.user.createQuiz.questions,
-    success: state.user.createQuiz.success,
-    title: state.user.createQuiz.title,
-    description: state.user.createQuiz.description
+    isCreateQuestionDialogOpen: createQuestion !== undefined,
+    questions: questions,
+    success: success,
+    title: title,
+    description: description,
+    deadline: deadline
   };
 }
 

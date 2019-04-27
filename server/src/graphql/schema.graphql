@@ -46,6 +46,7 @@ type Suggestion {
   question: Question!
   content: String
   imageUrl: String
+  isCorrect: Boolean!
 }
 
 type Score {

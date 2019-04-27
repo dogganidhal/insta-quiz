@@ -12,19 +12,25 @@ import { appReducer } from "./reducers/app-reducer";
 import thunk from "redux-thunk";
 import "moment/locale/fr";
 import moment from "moment";
-
-moment.locale("fr");
+import Firebase from "firebase";
 
 async function main() {
 
   let container = await AppModule.load();
   let store = createStore(appReducer, applyMiddleware(thunk.withExtraArgument(container)));
+  var config = {
+    apiKey: "AIzaSyB21Nd2mYmPkCTqFZbT3Zx7qjfS3Ih_Ppc",
+    authDomain: "insta-quiz-1555682215720.firebaseapp.com",
+    databaseURL: "https://insta-quiz-1555682215720.firebaseio.com",
+    projectId: "insta-quiz-1555682215720",
+    storageBucket: "insta-quiz-1555682215720.appspot.com",
+    messagingSenderId: "557540640258"
+  };
+  Firebase.initializeApp(config);
+  moment.locale("fr");
 
   ReactDOM.render(<Provider container={container}><App store={store}/></Provider> , document.getElementById('root'));
 
-  // If you want your app to work offline and load faster, you can change
-  // unregister() to register() below. Note this comes with some pitfalls.
-  // Learn more about service workers: https://bit.ly/CRA-PWA
   serviceWorker.unregister();
 
 }

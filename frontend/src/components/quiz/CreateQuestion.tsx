@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles, createStyles, FormControl, InputLabel, Input, createMuiTheme, MuiThemeProvider, InputAdornment, IconButton, Typography, Theme, Button } from '@material-ui/core';
-import { Send, Close, Check } from '@material-ui/icons';
+import { Send, Close, Check, PictureAsPdf, PictureInPicture, AddAPhoto, AddPhotoAlternate } from '@material-ui/icons';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'inversify';
-import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints } from '../../actions/user/create-question';
+import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints, uploadImageSuggestion } from '../../actions/user/create-question';
 import { AppState } from '../../state/app-state';
 import { connect } from 'react-redux';
 import { InsertSuggestionInput } from '../../model/insert-suggestion-input';
@@ -11,6 +11,8 @@ import { onSuggestionContentInputChanged } from '../../actions/user/create-sugge
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { QuestionType, questionTypeToString, questionTypeFromrString as questionTypeFromString } from '../../model/question';
+import Suggestion from './Suggestion';
+let { FilePicker } = require("react-file-picker");
 
 
 let styles = (theme: Theme) => createStyles({
@@ -27,34 +29,6 @@ let styles = (theme: Theme) => createStyles({
   pointsTextField: {
     margin: 16,
     flexWrap: "wrap"
-  },
-  suggestion: {
-    marginBottom: 16,
-    height: 56,
-    background: "#F2F2F2",
-    borderRadius: 8,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-  },
-  suggestionCorrect: {
-    height: 56,
-    background: "rgba(0, 210, 147, 0.76)",
-    borderRadius: 8,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    marginBottom: 16,
-  },
-  suggestionBody: {
-    paddingLeft: 16,
-    paddingRight: 16, 
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  suggestionContent: {
-    marginTop: "auto",
-    marginBottom: "auto"
   },
   questionTypeToggleGroup: {
     borderRadius: 8,
@@ -135,9 +109,17 @@ interface ICreateQuestionProps {
   deleteSuggestionCorrect(index: number): void;
   setQuestionType(questionType: QuestionType): void;
   setQuestionPoints(points: number): void;
+  addImageSuggestion(image: File): void;
 }
 
 class CreateQuestionComponent extends Component<ICreateQuestionProps> {
+
+  private handleImagePicker(event: React.MouseEvent) {
+    event.preventDefault();
+    let imagePicker = document.createElement('input');
+    imagePicker.setAttribute('type', 'image/*');
+    imagePicker.click();
+  }
 
   public render() {
     let { classes } = this.props;
@@ -195,32 +177,28 @@ class CreateQuestionComponent extends Component<ICreateQuestionProps> {
                       onClick={this.props.addSuggestion}>
                       <Send color="primary" />
                     </IconButton>
+                    <FilePicker
+                      extensions={['jpg', 'jpeg', 'png', 'svg']}
+                      dims={{ minWidth: 100, maxWidth: 500, minHeight: 100, maxHeight: 500 }}
+                      onChange={this.props.addImageSuggestion}>
+                      <IconButton
+                        aria-label="Ajouter une photo">
+                        <AddPhotoAlternate color="primary" />
+                      </IconButton>
+                    </FilePicker>
                   </InputAdornment>
                 } />
             </FormControl>
           }
           {
-            // TODO: Handle image suggestions
             this.props.questionType !== QuestionType.INPUT && this.props.suggestions &&
             this.props.suggestions
               .map((suggestion, index) => {
-                return <div key={index} className={suggestion.isCorrect ? classes.suggestionCorrect : classes.suggestion}>
-                  <div className={classes.suggestionBody}>
-                    <Typography inline className={classes.suggestionContent}>{suggestion.content}</Typography>
-                    <div>
-                      <IconButton
-                        onClick={() => this.props.toggleSuggestionCorrect(index)}
-                        className={classes.isCorrectIconButton}>
-                        <Check color={!suggestion.isCorrect ? "secondary" : "default"} />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => this.props.deleteSuggestionCorrect(index)}
-                        className={classes.isCorrectIconButton}>
-                        <Close />
-                      </IconButton>
-                    </div>
-                  </div>
-                </div>
+                return <Suggestion
+                  key={index} 
+                  suggestion={suggestion}
+                  toggleIsCorrect={() => this.props.toggleSuggestionCorrect(index)}
+                  delete={() => this.props.deleteSuggestionCorrect(index)}/>;
               })
           }
           {
@@ -250,7 +228,8 @@ function mapDispatchToProps(dispatch: ThunkDispatch<AppState, Container, CreateQ
     toggleSuggestionCorrect: index => dispatch(toggleSuggestionCorrect(index)),
     deleteSuggestionCorrect: index => dispatch(deleteSuggestion(index)),
     setQuestionType: type => dispatch(setQuestionType(type)),
-    setQuestionPoints: points => dispatch(setQuestionPoints(points))
+    setQuestionPoints: points => dispatch(setQuestionPoints(points)),
+    addImageSuggestion: image => dispatch(uploadImageSuggestion(image))
   };
 }
 

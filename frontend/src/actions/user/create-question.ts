@@ -6,6 +6,7 @@ import { CreateQuestionState } from "../../state/user-state/create-quiz-state/cr
 import { Container } from "inversify";
 import { CreateSuggestionAction } from "./create-suggestion";
 import { AppState } from "../../state/app-state";
+import firebase from "firebase";
 
 export type CreateQuestionAction = CreateQuestionAddSuggestionAction 
   | CreateQuestionSetContentAction
@@ -136,5 +137,33 @@ export function setQuestionType(type: QuestionType): ThunkAction<void, AppState,
 export function setQuestionPoints(points: number): ThunkAction<void, AppState, Container, CreateQuestionAction> {
   return (dispatch) => {
     dispatch({ type: "CREATE_QUESTION_SET_POINTS", points: points });
+  };
+}
+
+export function uploadImageSuggestion(image: File): ThunkAction<void, AppState, Container, CreateQuestionAction> {
+  return async (dispatch, getState) => {
+    // Upload the image
+    let storageReference = await firebase.storage().ref().child(`/images/${image.name}`).put(image);
+    let url = await storageReference.ref.getDownloadURL();
+    dispatch({ 
+      type: "CREATE_SUGGESTION_SET_IMAGE_URL",
+      imageUrl: url
+    });
+    // Create the new suggestion
+    let { createQuestion } = getState().user.createQuiz;
+    if (createQuestion && (createQuestion.createSuggestion.content || createQuestion.createSuggestion.imageUrl)) {
+      dispatch({
+        type: "CREATE_QUESTION_ADD_SUGGESTION",
+        suggestion: {
+          content: createQuestion.createSuggestion.content,
+          imageUrl: createQuestion.createSuggestion.imageUrl,
+          isCorrect: createQuestion.createSuggestion.isCorrect
+        }
+      });
+      dispatch({
+        type: "CREATE_SUGGESTION_SET_CONTENT",
+        content: undefined
+      });
+    }
   };
 }

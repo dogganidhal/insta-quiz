@@ -170,7 +170,7 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
               <List>
                 {
                   this.props.questions.map((question, index) => {
-                    return <ListItem divider={index < this.props.questions.length - 1} dense>
+                    return <ListItem key={index} divider={index < this.props.questions.length - 1} dense>
                       <Question
                         onEditButtonClicked={() => this.onEditQuestionButtonClicked(question)}
                         question={question} />

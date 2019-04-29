@@ -17,6 +17,7 @@ let styles = (theme: Theme) => ({
 interface ILoginProps {
   isLoading: true;
   classes: any;
+  clientId: string;
   // Actions 
   login(token: string): void;
 }
@@ -33,7 +34,7 @@ class LoginComponent extends React.Component<ILoginProps> {
   }
 
   public render() {
-    let { classes, isLoading } = this.props;
+    let { classes, isLoading, clientId } = this.props;
     return (
       <div style={{
         display: "grid",
@@ -46,7 +47,7 @@ class LoginComponent extends React.Component<ILoginProps> {
               <CircularProgress className={classes.progress} /> :
               <GoogleLogin
                 className="Google-Login-Button"
-                clientId="557540640258-2t3iv1vs2jbv5fcrffniushftg6j8ps3.apps.googleusercontent.com"
+                clientId={clientId}
                 buttonText="Se connecter avec Google"
                 onSuccess={this.onSuccess.bind(this)}
                 onFailure={this.onFailure.bind(this)}

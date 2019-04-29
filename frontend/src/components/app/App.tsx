@@ -19,6 +19,7 @@ const theme = createMuiTheme({
 });
 
 export interface IAppProps {
+  googleClientId: string;
   store: Store;
 }
 
@@ -28,7 +29,7 @@ class AppComponent extends Component<IAppProps> {
     return (
       <Provider store={this.props.store}> 
         <MuiThemeProvider theme={theme}>
-          <Main/>
+          <Main clientId={this.props.googleClientId} />
         </MuiThemeProvider>
       </Provider>
     );

@@ -6,25 +6,30 @@ import ApolloClient from "apollo-client";
 import { InMemoryCache, ApolloLink, NormalizedCacheObject } from "apollo-boost";
 import { createHttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
-import { ApolloCache } from "apollo-cache";
+import { Config, EnvironmentConfig } from "../config/config";
+import { initializeApp } from "firebase";
 
 
 export default class AppModule {
 
-  public static async load(): Promise<Container> {
+  public static async load(config: Config): Promise<Container> {
 
     let container = new Container();
-    
+    let environmentConfig = process.env.NODE_ENV === "development" ? config.development : config.staging;
+
+    container.bind<EnvironmentConfig>(Types.EnvironmentConfig).toConstantValue(environmentConfig);
     container.bind<IUserSession>(Types.IUserSession).to(UserSessionImpl);
     container.bind<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient).toDynamicValue(context => {
       let httpLink = createHttpLink({
-        uri: "http://localhost:3000/graphql"
+        uri: environmentConfig.apiBaseUrl
       });
       return new ApolloClient<NormalizedCacheObject>({
         link: this.authLink(container).concat(httpLink),
         cache: new InMemoryCache()
       });
     });
+    initializeApp(environmentConfig.firebaseConfig);
+    
     return container;
     
   }

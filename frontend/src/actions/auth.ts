@@ -8,7 +8,10 @@ import { IUserSession } from "../session/user";
 import { Types } from "../constants/types";
 import { ApolloClient, gql, NormalizedCacheObject } from "apollo-boost";
 
-export type AuthAction = SetAuthLoadingAction | SetLoggedInAction | SetLoggedOutAction;
+export type AuthAction = SetAuthLoadingAction 
+  | SetLoggedInAction 
+  | SetLoggedOutAction
+  | SetClientIdAction;
 
 interface SetAuthLoadingAction extends IAction {
   type: "SET_AUTH_LOADING";
@@ -23,6 +26,11 @@ interface SetLoggedInAction extends IAction {
 
 interface SetLoggedOutAction extends IAction {
   type: "SET_LOGGED_OUT";
+}
+
+interface SetClientIdAction extends IAction {
+  type: "SET_CLIENT_ID";
+  clientId: string;
 }
 
 export function login(token: string): ThunkAction<void, AuthState, Container, AuthAction> {

@@ -12,24 +12,26 @@ import { appReducer } from "./reducers/app-reducer";
 import thunk from "redux-thunk";
 import "moment/locale/fr";
 import moment from "moment";
-import { initializeApp } from "firebase";
+import { getConfig, EnvironmentConfig } from "./config/config";
+import { Types } from "./constants/types";
 
 async function main() {
 
-  let container = await AppModule.load();
+  let config = getConfig();
+  let container = await AppModule.load(config);
   let store = createStore(appReducer, applyMiddleware(thunk.withExtraArgument(container)));
-  var config = {
-    apiKey: "AIzaSyB21Nd2mYmPkCTqFZbT3Zx7qjfS3Ih_Ppc",
-    authDomain: "insta-quiz-1555682215720.firebaseapp.com",
-    databaseURL: "https://insta-quiz-1555682215720.firebaseio.com",
-    projectId: "insta-quiz-1555682215720",
-    storageBucket: "insta-quiz-1555682215720.appspot.com",
-    messagingSenderId: "557540640258"
-  };
-  initializeApp(config);
+  
   moment.locale("fr");
 
-  ReactDOM.render(<Provider container={container}><App store={store}/></Provider> , document.getElementById('root'));
+  ReactDOM.render(
+    <Provider 
+      container={container}>
+      <App 
+        store={store}
+        googleClientId={container.get<EnvironmentConfig>(Types.EnvironmentConfig).googleOAuth2ClientId} />
+    </Provider>, 
+    document.getElementById('root')
+  );
 
   serviceWorker.unregister();
 

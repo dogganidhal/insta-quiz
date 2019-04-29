@@ -28,6 +28,7 @@ let styles = (theme: Theme) => ({
 interface IMainProps {
   isLoading: boolean;
   isLogged: boolean;
+  clientId: string;
   // Actions
   loadApp(): void;
   classes: any; 
@@ -40,7 +41,7 @@ class MainComponent extends Component<IMainProps> {
   }
 
   public render() {
-    let { classes } = this.props;
+    let { classes, clientId } = this.props;
     if (this.props.isLoading)
       return <div className={classes.progressContainer}>
         <CircularProgress className={classes.progress} />
@@ -54,7 +55,7 @@ class MainComponent extends Component<IMainProps> {
         <Route path="/quiz/answer" component={AnswerQuiz} />
       </Router>;
     else
-      return <Login />;
+      return <Login clientId={clientId}/>;
   }
 }
 

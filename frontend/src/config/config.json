@@ -1,0 +1,26 @@
+{
+  "development": {
+    "apiBaseUrl": "http://localhost:3000/graphql",
+    "firebaseConfig": {
+      "apiKey": "AIzaSyB21Nd2mYmPkCTqFZbT3Zx7qjfS3Ih_Ppc",
+      "authDomain": "insta-quiz-1555682215720.firebaseapp.com",
+      "databaseURL": "https://insta-quiz-1555682215720.firebaseio.com",
+      "projectId": "insta-quiz-1555682215720",
+      "storageBucket": "insta-quiz-1555682215720.appspot.com",
+      "messagingSenderId": "557540640258"
+    },
+    "googleOAuth2ClientId": "557540640258-2t3iv1vs2jbv5fcrffniushftg6j8ps3.apps.googleusercontent.com"
+  },
+  "staging": {
+    "apiBaseUrl": "https://insta-quiz-api.herokuapp.com/graphql",
+    "firebaseConfig": {
+      "apiKey": "AIzaSyB21Nd2mYmPkCTqFZbT3Zx7qjfS3Ih_Ppc",
+      "authDomain": "insta-quiz-1555682215720.firebaseapp.com",
+      "databaseURL": "https://insta-quiz-1555682215720.firebaseio.com",
+      "projectId": "insta-quiz-1555682215720",
+      "storageBucket": "insta-quiz-1555682215720.appspot.com",
+      "messagingSenderId": "557540640258"
+    },
+    "googleOAuth2ClientId": "557540640258-2t3iv1vs2jbv5fcrffniushftg6j8ps3.apps.googleusercontent.com"
+  }
+}

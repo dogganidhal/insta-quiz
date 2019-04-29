@@ -4,7 +4,6 @@ import { Container } from 'inversify';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnswerQuizAction, loadQuiz, checkSuggestion, onInputChanged, submit } from '../../actions/user/answer-quiz';
 import { connect } from 'react-redux';
-import { Question, QuestionType } from '../../model/question';
 import { Quiz } from '../../model/quiz';
 import { Location } from 'history';
 import { RouteProps } from 'react-router';

@@ -1,5 +1,5 @@
 import { Quiz } from "./quiz";
-import { Suggestion } from "./suggestion";
+import { Suggestion, SuggestionWithCorrection } from "./suggestion";
 import { Answer } from "./answer";
 
 
@@ -15,7 +15,7 @@ export interface Question {
   readonly quizId: string;
   readonly quiz: Quiz;
   readonly type: QuestionType;
-  readonly suggestions: Suggestion[];
+  readonly suggestions: (Suggestion | SuggestionWithCorrection)[];
   readonly answers: Answer[];
 }
 

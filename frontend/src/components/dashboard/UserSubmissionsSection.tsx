@@ -49,7 +49,7 @@ class UserSubmissionsComponent extends React.Component<IUserSubmissionsProps> {
           title={submission.title}
           deadlineText={submission.deadlineText}
           numberOfParticipants={submission.numberOfParticipants}
-          onSeeDetailsClicked={() => this.onSeeQuizCorrectionClicked(submission.id)}
+          onSeeDetailsClicked={() => this.onSeeQuizCorrectionClicked(submission.quizId)}
           scoreString={submission.scoreString}
         />
       </Grid>;
@@ -97,6 +97,7 @@ function mapStateToProps(state: AppState, ownProperties: IUserSubmissionsProps):
     submissions: state.user.userSubmissions.submissions.map(submission => {
       return {
         id: submission.id,
+        quizId: submission.quiz.id,
         title: submission.quiz.title,
         numberOfParticipants: submission.quiz.submissions.length,
         deadlineText: submission.quiz.deadline ? formatDeadline(submission.quiz.deadline) : undefined,

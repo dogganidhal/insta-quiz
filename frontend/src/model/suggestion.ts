@@ -10,3 +10,4 @@ export interface Suggestion {
 }
 
 export type CheckableSuggestion = Suggestion & { isChecked: boolean };
+export type SuggestionWithCorrection = Suggestion & { isCorrect: boolean };

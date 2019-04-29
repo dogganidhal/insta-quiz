@@ -65,7 +65,9 @@ interface CreateQuizSubmitAction extends IUserAction {
   type: "CREATE_QUIZ_SUBMIT";
 }
 
-export function onQuizTitleInputChanged(input: string): ThunkAction<void, AppState, Container, CreateQuizAction> {
+type CreateQuizAsyncAction = ThunkAction<void, AppState, Container, CreateQuizAction>;
+
+export function onQuizTitleInputChanged(input: string): CreateQuizAsyncAction {
   return dispatch => {
     dispatch({
       type: "CREATE_QUIZ_SET_TITLE",
@@ -74,7 +76,7 @@ export function onQuizTitleInputChanged(input: string): ThunkAction<void, AppSta
   }
 }
 
-export function onQuizDescriptionInputChanged(input: string): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function onQuizDescriptionInputChanged(input: string): CreateQuizAsyncAction {
   return dispatch => {
     dispatch({
       type: "CREATE_QUIZ_SET_DESCRIPTION",
@@ -83,7 +85,7 @@ export function onQuizDescriptionInputChanged(input: string): ThunkAction<void, 
   }
 }
 
-export function openQuestionDialog(): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function openQuestionDialog(): CreateQuizAsyncAction {
   return dispatch => {
     dispatch({ 
       type: "CREATE_QUIZ_ADD_QUESTION",
@@ -95,7 +97,7 @@ export function openQuestionDialog(): ThunkAction<void, AppState, Container, Cre
   };
 }
 
-export function addQuestion(): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function addQuestion(): CreateQuizAsyncAction {
   return (dispatch, getState) => {
     let { questions, createQuestion } = getState().user.createQuiz;
     if (createQuestion && createQuestion.content) {
@@ -119,7 +121,7 @@ export function addQuestion(): ThunkAction<void, AppState, Container, CreateQuiz
   };
 }
 
-export function abortQuestion(): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function abortQuestion(): CreateQuizAsyncAction {
   return dispatch => {
     dispatch({ 
       type: "CREATE_QUIZ_ADD_QUESTION",  
@@ -128,7 +130,7 @@ export function abortQuestion(): ThunkAction<void, AppState, Container, CreateQu
   };
 }
 
-export function setTemplateUriLocation(location: Location): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function setTemplateUriLocation(location: Location): CreateQuizAsyncAction {
   return dispatch => {
     let queryString = location.search.replace("?", "");
     let templateId: QuizTemplateId = parse(queryString).template as QuizTemplateId;
@@ -155,7 +157,7 @@ export function setTemplateUriLocation(location: Location): ThunkAction<void, Ap
   };
 }
 
-export function setDeadlineText(deadline: Moment): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function setDeadlineText(deadline: Moment): CreateQuizAsyncAction {
   return dispatch => {
     if (deadline != null) {
       dispatch({ type: "CREATE_QUIZ_SET_DEADLINE", deadline: deadline.toISOString() });
@@ -163,7 +165,7 @@ export function setDeadlineText(deadline: Moment): ThunkAction<void, AppState, C
   }
 }
 
-export function submit(): ThunkAction<void, AppState, Container, CreateQuizAction> {
+export function submit(): CreateQuizAsyncAction {
   return async (dispatch, getState, container) => {
     let client = container.get<ApolloClient<NormalizedCacheObject>>(Types.ApolloClient);
     let { title, description, deadline, questions } = getState().user.createQuiz;

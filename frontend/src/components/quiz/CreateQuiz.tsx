@@ -11,7 +11,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { InsertQuestionInput } from '../../model/insert-question-input';
 import CreateQuestion from './CreateQuestion';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker, DateTimePicker } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 import { Moment } from 'moment';
 import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/create-quiz';
@@ -152,16 +152,16 @@ class CreateQuizComponent extends React.Component<ICreateQuizProps, any> {
                   value={this.props.description} />
               </FormControl>
               <MuiPickersUtilsProvider utils={MomentUtils}>
-                <DatePicker
+                <DateTimePicker
                   clearable
                   clearLabel="RÉINITIALISER"
                   margin="normal"
                   label="Date limite"
                   value={this.props.deadline || null}
-                  format="DD/MM/YYYY"
+                  format="DD/MM/YYYY hh:mm"
                   className={classes.textField}
-                  onChange={this.props.setDeadlineText}
-                />
+                  minDate={new Date()}
+                  onChange={this.props.setDeadlineText}/>
               </MuiPickersUtilsProvider>
             </MuiThemeProvider>
             {

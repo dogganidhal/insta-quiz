@@ -1,6 +1,5 @@
-
+import moment from "moment";
 
 export function formatDeadline(deadline: string): string {
-  let date = new Date(deadline);
-  return date.toLocaleDateString();
+  return moment(deadline).format("DD/MM/YYYY hh:mm")
 }

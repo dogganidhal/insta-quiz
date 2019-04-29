@@ -12,6 +12,7 @@ import Dashboard from '../dashboard/Dashboard';
 import CreateQuiz from '../quiz/CreateQuiz';
 import AnswerQuiz from '../quiz/AnswerQuiz';
 import QuizCorrection from '../quiz/QuizCorrection';
+import QuizResults from '../quiz/QuizResults';
 
 let styles = (theme: Theme) => ({
   progress: {
@@ -48,7 +49,7 @@ class MainComponent extends Component<IMainProps> {
       return <Router>
         <Route exact path="/" component={Dashboard} />
         <Route path="/quiz/new" component={CreateQuiz} />
-        <Route path="/quiz/results" />
+        <Route path="/quiz/results" component={QuizResults}/>
         <Route path="/quiz/correction" component={QuizCorrection}/>
         <Route path="/quiz/answer" component={AnswerQuiz} />
       </Router>;

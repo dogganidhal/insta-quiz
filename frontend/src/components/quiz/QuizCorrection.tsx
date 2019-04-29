@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteProps } from 'react-router';
 import { Location } from 'history';
 import NavigationBar from '../navigation/NavigationBar';
-import { CircularProgress, Theme, withStyles, Typography, Divider, createStyles } from '@material-ui/core';
+import { CircularProgress, Theme, withStyles, Typography, Divider, createStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { Quiz } from '../../model/quiz';
 import QuestionCorrection from './QuestionCorrection';
 import { SuggestionWithCorrection } from '../../model/suggestion';
@@ -35,11 +35,32 @@ let styles = createStyles({
     boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
     borderRadius: 8,
     padding: 36,
+    paddingTop: 56,
     marginLeft: "auto",
     marginRight: "auto",
+    marginTop: 42,
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    position: "relative"
   },
+  quizTitleContainer: {
+    position: "absolute",
+    left: 77, right: 77,
+    top: -42, height: 84,
+    backgroundColor: "#F44A4A",
+    display: "grid",
+    placeItems: "center",
+    borderRadius: 8,
+  }
+});
+
+let titleTheme = createMuiTheme({
+  palette: {
+    type: "dark",
+    primary: {
+      main: "#FFFFFF"
+    }
+  }
 });
 
 export interface IQuizCorrectionProps extends RouteProps {
@@ -73,7 +94,11 @@ class QuizCorrectionComponent extends React.Component<IQuizCorrectionProps> {
           quiz &&
           <div className={classes.body}>
             <div className={classes.quizInfoContainer}>
-              <Typography variant="title">{quiz.title}</Typography>
+              <div className={classes.quizTitleContainer}>
+                <MuiThemeProvider theme={titleTheme}>
+                  <Typography variant="h6" color="primary">{quiz.title}</Typography>
+                </MuiThemeProvider>
+              </div>
               {quiz.description && <Typography>{quiz.description}</Typography>}
               {quiz.questions.map((question, index) =>
                 <div>

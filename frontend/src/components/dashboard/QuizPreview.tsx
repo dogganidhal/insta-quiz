@@ -1,7 +1,7 @@
 import React from "react";
-import { Typography, Button, Theme, withStyles } from "@material-ui/core";
+import { Typography, Button, Theme, withStyles, createStyles } from "@material-ui/core";
 
-let styles = (theme: Theme) => ({
+let styles = createStyles({
   container: {
     height: 194,
     width: 284,
@@ -9,8 +9,10 @@ let styles = (theme: Theme) => ({
     border: "1px solid #DADADA",
     borderRadius: "8px",
   },
-  button: {
-    margin: theme.spacing.unit,
+  buttons: {
+    margin: 16,
+    position: "absolute",
+    left: 8,
     right: 8,
     bottom: 8
   },
@@ -37,6 +39,7 @@ export interface IQuizPreviewProps {
   deadlineText?: string;
   numberOfParticipants: number;
   onSeeDetailsClicked(): void;
+  onShareClicked(): void;
 }
 
 class QuizPreviewComponent extends React.Component<IQuizPreviewProps> {
@@ -71,16 +74,23 @@ class QuizPreviewComponent extends React.Component<IQuizPreviewProps> {
             {this.props.numberOfParticipants} participants
           </Typography>
         </div>
-        <Button 
-          color="primary" 
-          className={classes.button} 
-          style={{
-            position: "absolute",
-            bottom: 0, right: 0
-          }}
-          onClick={this.props.onSeeDetailsClicked}>
-          Voir les résultats
+        <div style={{
+          bottom: 8, left: 8, right:8, 
+          position: "absolute",
+          display: "flex",
+          justifyContent: "space-around"
+        }}>
+          <Button
+            color="primary"
+            onClick={this.props.onSeeDetailsClicked}>
+            Résultats
         </Button>
+          <Button
+            color="primary"
+            onClick={this.props.onShareClicked}>
+            Partager
+        </Button>
+        </div>
       </div>
     );
   }

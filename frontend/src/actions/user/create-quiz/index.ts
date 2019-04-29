@@ -173,7 +173,17 @@ export function submit(): CreateQuizAsyncAction {
     if (title && questions.length > 0) { 
       let quizData: InsertQuizInput = {
         title: title,
-        questions: questions,
+        questions: questions.map(question => {
+          return {
+            ...question,
+            suggestions: question.suggestions ? question.suggestions.map(suggestion => {
+              return {
+                ...suggestion,
+                isCorrect: suggestion.isCorrect || false
+              }
+            }) : undefined
+          }
+        }),
         description: description,
         deadline: deadline ? new Date(deadline) : undefined
       };

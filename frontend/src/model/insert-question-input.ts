@@ -7,5 +7,5 @@ export interface InsertQuestionInput {
   content: string;
   type: QuestionType;
   points?: number;
-  suggestions?: [InsertSuggestionInput];
+  suggestions?: InsertSuggestionInput[];
 }

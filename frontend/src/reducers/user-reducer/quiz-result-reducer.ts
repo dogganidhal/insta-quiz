@@ -1,5 +1,5 @@
-import { QuizResultState } from "../../state/user-state";
 import { IUserAction } from "../../actions/user";
+import { QuizResultState } from "../../state/user-state/quiz-result-state";
 
 let initialState: QuizResultState = {
 

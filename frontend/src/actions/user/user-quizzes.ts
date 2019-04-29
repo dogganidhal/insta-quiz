@@ -4,7 +4,6 @@ import { Container } from "inversify";
 import { ApolloClient, NormalizedCacheObject, gql } from "apollo-boost";
 import { Types } from "../../constants/types";
 import { IUserAction } from ".";
-import { UserQuizzesState } from "../../state/user-state/user-quizzes-state";
 import { AppState } from "../../state/app-state";
 
 

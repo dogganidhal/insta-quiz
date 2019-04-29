@@ -12,6 +12,7 @@ import { Location } from "history";
 import { QuestionType } from "../../../model/question";
 import { InsertQuestionSubmissionInput } from "../../../../../server/src/model/dto/input/insert-question-submission";
 import { Submission } from "../../../model/submission";
+import { IUserSession } from "../../../session/user";
 
 export type AnswerQuizAction = AnswerQuizSetLoadingAction
   | AnswerQuizSetQuestionsAction
@@ -135,6 +136,13 @@ export function loadQuiz(location: Location): AnswerQuestionAsyncAction {
       dispatch({ type: "ANSWER_QUIZ_SET_IS_LOADING", isLoading: false });
       // TODO: Give some feedback to the user
       window.location.href = "/";
+      return;
+    }
+    let userSession = container.get<IUserSession>(Types.IUserSession);
+    if (!userSession.user || userSession.user.id === quiz.authorId) {
+      dispatch({ type: "ANSWER_QUIZ_SET_IS_LOADING", isLoading: false });
+      // TODO: Give some feedback to the user
+      window.location.href = `/quiz/results?id=${quiz.id}`;
       return;
     }
     let questions = quiz.questions.map(question => {

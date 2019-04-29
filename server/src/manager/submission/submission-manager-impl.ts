@@ -83,7 +83,7 @@ export class SubmissionManagerImpl implements ISubmissionManager {
         .filter(suggestion => suggestion.isCorrect)
         .map(suggestion => suggestion.id);
       let answerSuggestionIds = answers.map(answer => answer.suggestionId);
-      let correctAnswer = correctSuggestionIds
+      let correctAnswer = answerSuggestionIds.length === correctSuggestionIds.length && correctSuggestionIds
         .map(suggestionId => answerSuggestionIds.includes(suggestionId))
         .reduce((previous, current) => previous && current, true);
       totalPoints += question.points;

@@ -12,7 +12,7 @@ import { appReducer } from "./reducers/app-reducer";
 import thunk from "redux-thunk";
 import "moment/locale/fr";
 import moment from "moment";
-import Firebase from "firebase";
+import { initializeApp } from "firebase";
 
 async function main() {
 
@@ -26,7 +26,7 @@ async function main() {
     storageBucket: "insta-quiz-1555682215720.appspot.com",
     messagingSenderId: "557540640258"
   };
-  Firebase.initializeApp(config);
+  initializeApp(config);
   moment.locale("fr");
 
   ReactDOM.render(<Provider container={container}><App store={store}/></Provider> , document.getElementById('root'));

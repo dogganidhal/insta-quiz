@@ -1,4 +1,4 @@
-import { CreateQuizAction } from "../../actions/user/answer-quiz/create-quiz";
+import { CreateQuizAction } from "../../actions/user/create-quiz";
 import { CreateQuizState } from "../../state/user-state/create-quiz-state";
 import { createQuestionReducer } from "./create-quiz-reducer/create-question-reducer";
 

@@ -7,6 +7,7 @@ import { IQuizRepository } from "../../repository/quiz";
 import { QuizAleadySubmittedException, QuizNotFoundException, UnansweredQuestionException, InvalidSingleChoiceAnswer, InconsistentAnswerException, QuizDeadlineReached } from "../../exceptions";
 import { ISubmissionRepository } from "../../repository/submission";
 import { QuestionType } from "../../model/entity/question";
+import { Suggestion } from "../../model/entity/suggestion";
 
 
 @injectable()
@@ -31,7 +32,7 @@ export class SubmissionManagerImpl implements ISubmissionManager {
     let questions = await this.quizRepository.getQuestionsByQuizId(quiz.id);
     
     for (let question of submissionData.questions) {
-      if (question.answers.length < 0)
+      if (question.answers.length === 0)
         throw UnansweredQuestionException(question.questionId);
     }
     
@@ -121,26 +122,29 @@ export class SubmissionManagerImpl implements ISubmissionManager {
           throw UnansweredQuestionException(question.questionId);
 
         let questionEntity = await this.quizRepository.getQuestionById(question.questionId);
-        if (questionEntity.type === QuestionType.INPUT && question.answers.filter(answer => answer.content).length === 0)
+        if (questionEntity.type == QuestionType.INPUT && question.answers.filter(answer => answer.content).length == 0)
           throw UnansweredQuestionException(question.questionId);
-        else if (question.answers.filter(answer => answer.suggestionId).length === 0)
+        if (questionEntity.type != QuestionType.INPUT && question.answers.filter(answer => answer.suggestionId).length == 0)
           throw UnansweredQuestionException(question.questionId);
         
         await Promise.all(
           question.answers.map(async answer => {
             
-            let suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
+            let suggestion: Suggestion;
+            let suggestionId: string;
             
-            if (suggestion.questionId !== question.questionId)
-              throw InconsistentAnswerException(question.questionId);
-
-            
+            if (questionEntity.type != QuestionType.INPUT) {
+              suggestion = await this.quizRepository.getSuggestionsById(answer.suggestionId);
+              if (suggestion.questionId !== question.questionId)
+                throw InconsistentAnswerException(question.questionId);
+              suggestionId = suggestion.id;
+            }            
             
             let answerEntity = new Entity.Answer({
               question: questionEntity,
               questionId: questionEntity.id,
               suggestion: suggestion,
-              suggestionId: suggestion.id,
+              suggestionId: suggestionId,
               content: answer.content
             })
             answerEntities.push(answerEntity);

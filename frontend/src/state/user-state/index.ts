@@ -1,10 +1,7 @@
 import { UserQuizzesState } from "./user-quizzes-state";
 import { UserSubmissionsState } from "./user-submissions-state";
 import { CreateQuizState } from "./create-quiz-state";
-
-export interface AnswerQuizState {
-  isLoading: boolean;
-}
+import { AnswerQuizState } from "./answer-quiz";
 
 export interface QuizResponseState {
 

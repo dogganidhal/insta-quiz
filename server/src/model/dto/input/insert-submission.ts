@@ -2,9 +2,9 @@ import { InsertAnswerInput } from "./insert-answer";
 import { InsertQuestionSubmissionInput } from "./insert-question-submission";
 
 
-export class InsertSubmissionInput {
+export interface InsertSubmissionInput {
 
-  public quizId: string;
-  public questions: InsertQuestionSubmissionInput[];
+  readonly quizId: string;
+  readonly questions: InsertQuestionSubmissionInput[];
 
 }

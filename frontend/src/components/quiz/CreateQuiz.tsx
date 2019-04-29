@@ -1,13 +1,11 @@
 import React from 'react';
 import { RouteProps } from 'react-router';
 import NavigationBar from '../navigation/NavigationBar';
-import { createStyles, Typography, withStyles, ButtonBase, MuiThemeProvider, TextField, createMuiTheme, List, ListItem, Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, Button, FormControl, InputLabel, Input } from '@material-ui/core';
+import { createStyles, Typography, withStyles, MuiThemeProvider, createMuiTheme, List, ListItem, Dialog, DialogContent, DialogActions, Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import { Add, Send } from "@material-ui/icons";
-import { Question as QuestionModel } from '../../model/question';
 import Question from './Question';
 import { Location } from "history";
 import { Container } from 'inversify';
-import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/answer-quiz/create-quiz';
 import { AppState } from '../../state/app-state';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
@@ -16,6 +14,7 @@ import CreateQuestion from './CreateQuestion';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 import { Moment } from 'moment';
+import { CreateQuizAction, setTemplateUriLocation, openQuestionDialog, abortQuestion, addQuestion, submit, onQuizDescriptionInputChanged, onQuizTitleInputChanged, setDeadlineText } from '../../actions/user/create-quiz';
 
 
 let styles = createStyles({

@@ -3,7 +3,7 @@ import { withStyles, createStyles, FormControl, InputLabel, Input, createMuiThem
 import { Send, AddPhotoAlternate } from '@material-ui/icons';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'inversify';
-import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints, uploadImageSuggestion } from '../../actions/user/answer-quiz/create-question';
+import { CreateQuestionAction, addSuggestion, onQuestionContentInputChanged, toggleSuggestionCorrect, deleteSuggestion, setQuestionType, setQuestionPoints, uploadImageSuggestion } from '../../actions/user/create-quiz/create-question';
 import { AppState } from '../../state/app-state';
 import { connect } from 'react-redux';
 import { InsertSuggestionInput } from '../../model/insert-suggestion-input';
@@ -113,13 +113,6 @@ interface ICreateQuestionProps {
 }
 
 class CreateQuestionComponent extends Component<ICreateQuestionProps> {
-
-  private handleImagePicker(event: React.MouseEvent) {
-    event.preventDefault();
-    let imagePicker = document.createElement('input');
-    imagePicker.setAttribute('type', 'image/*');
-    imagePicker.click();
-  }
 
   public render() {
     let { classes } = this.props;

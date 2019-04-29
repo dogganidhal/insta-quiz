@@ -8,3 +8,5 @@ export interface Suggestion {
   readonly content?: string;
   readonly imageUrl?: string;
 }
+
+export type CheckableSuggestion = Suggestion & { isChecked: boolean };

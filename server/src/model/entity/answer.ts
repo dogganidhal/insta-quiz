@@ -24,14 +24,14 @@ export class Answer {
   public suggestionId: string;
 
   @JoinColumn()
-  @ManyToOne(type => Suggestion, { nullable: false })
+  @ManyToOne(type => Suggestion, { nullable: true })
   public suggestion: Suggestion;
 
   @Column()
   public questionId: string;
 
   @JoinColumn()
-  @ManyToOne(type => Question, { nullable: false })
+  @ManyToOne(type => Question, { nullable: true })
   public question: Question;
 
   constructor()

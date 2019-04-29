@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { CreateSuggestionAction } from "./create-suggestion";
-import firebase from "firebase";
+import { storage } from "firebase";
 import { IUserAction } from "..";
 import { InsertSuggestionInput } from "../../../model/insert-suggestion-input";
 import { QuestionType } from "../../../model/question";
@@ -142,7 +142,7 @@ export function setQuestionPoints(points: number): ThunkAction<void, AppState, C
 export function uploadImageSuggestion(image: File): ThunkAction<void, AppState, Container, CreateQuestionAction> {
   return async (dispatch, getState) => {
     // Upload the image
-    let storageReference = await firebase.storage().ref().child(`/images/${image.name}`).put(image);
+    let storageReference = await storage().ref().child(`/images/${image.name}`).put(image);
     let url = await storageReference.ref.getDownloadURL();
     dispatch({ 
       type: "CREATE_SUGGESTION_SET_IMAGE_URL",
